@@ -12,7 +12,7 @@ public class User {
     private Long id;
     private String userName;
     private String UserPhoneNumber;
-    @OneToMany(mappedBy = "report")
+    @OneToMany(mappedBy = "user")
     private Collection<Report> userReports;
 
     public User() {
