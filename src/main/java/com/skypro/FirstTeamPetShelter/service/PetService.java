@@ -33,6 +33,7 @@ public interface PetService {
     /**
      * Редактирование животного
      * @param id    - ID животного
+     * @param pet    - новые сведения об объекте класса Pet
      * @return      - Возвращает Pet
      * @throws com.skypro.FirstTeamPetShelter.exception.PetNotFoundException, если животное не найдено
      */
