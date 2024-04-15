@@ -1,7 +1,9 @@
 package com.skypro.FirstTeamPetShelter.service;
 
 import com.skypro.FirstTeamPetShelter.model.PetAvatar;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.io.IOException;
 import java.util.Collection;
 
 /**
@@ -10,10 +12,10 @@ import java.util.Collection;
 public interface PetAvatarService {
     /**
      * Добавить аватар питомца в БД
-     * @param petAvatar - Аватар питомца
-     * @return          - Возвращает PetAvatar
+     * @param petAvatarFile - Аватар питомца
+     * @return          - Возвращает PetAvatarFile
      */
-    PetAvatar addPetAvatar(PetAvatar petAvatar);
+    void addPetAvatar(Long id, MultipartFile petAvatarFile) throws IOException;
 
     /**
      * Получить аватар питомца
