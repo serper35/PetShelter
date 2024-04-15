@@ -1,9 +1,6 @@
 package com.skypro.FirstTeamPetShelter.model;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
+import jakarta.persistence.*;
 
 import java.util.Objects;
 
@@ -12,12 +9,19 @@ public class Info {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+    @Column(unique = true)
+    private String keyWord;
     private String message;
 
     public Info() {
     }
 
     public Info(String message) {
+        this.message = message;
+    }
+
+    public Info(String keyWord, String message) {
+        this.keyWord = keyWord;
         this.message = message;
     }
 
@@ -42,23 +46,32 @@ public class Info {
         this.message = message;
     }
 
+    public String getKeyWord() {
+        return keyWord;
+    }
+
+    public void setKeyWord(String keyWord) {
+        this.keyWord = keyWord;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         Info info = (Info) o;
-        return Objects.equals(id, info.id) && Objects.equals(message, info.message);
+        return Objects.equals(id, info.id) && Objects.equals(keyWord, info.keyWord) && Objects.equals(message, info.message);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, message);
+        return Objects.hash(id, keyWord, message);
     }
 
     @Override
     public String toString() {
         return "Info{" +
                 "id=" + id +
+                ", keyWord='" + keyWord + '\'' +
                 ", message='" + message + '\'' +
                 '}';
     }

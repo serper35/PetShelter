@@ -14,29 +14,23 @@ public class Shelter {
     private Long id;
     private String shelterName;
     private String shelterInfo;             // Расписание работы и адрес
-    private ShelterImage drivingDirection;  // Схема проезда
-    private ShelterImage shelterAvatar;     // Изображение для приюта
     private String securityContactDetail;   // Контактные данные охраны
     private String safetyInformation;       // Информация по безопасности на территории приюта
 
     public Shelter() {
     }
 
-    public Shelter(String shelterName, String shelterInfo, ShelterImage drivingDirection, ShelterImage shelterAvatar, String securityContactDetail, String safetyInformation) {
+    public Shelter(String shelterName, String shelterInfo, String securityContactDetail, String safetyInformation) {
         this.shelterName = shelterName;
         this.shelterInfo = shelterInfo;
-        this.drivingDirection = drivingDirection;
-        this.shelterAvatar = shelterAvatar;
         this.securityContactDetail = securityContactDetail;
         this.safetyInformation = safetyInformation;
     }
 
-    public Shelter(Long id, String shelterName, String shelterInfo, ShelterImage drivingDirection, ShelterImage shelterAvatar, String securityContactDetail, String safetyInformation) {
+    public Shelter(Long id, String shelterName, String shelterInfo, String securityContactDetail, String safetyInformation) {
         this.id = id;
         this.shelterName = shelterName;
         this.shelterInfo = shelterInfo;
-        this.drivingDirection = drivingDirection;
-        this.shelterAvatar = shelterAvatar;
         this.securityContactDetail = securityContactDetail;
         this.safetyInformation = safetyInformation;
     }
@@ -65,22 +59,6 @@ public class Shelter {
         this.shelterInfo = shelterInfo;
     }
 
-    public ShelterImage getDrivingDirection() {
-        return drivingDirection;
-    }
-
-    public void setDrivingDirection(ShelterImage drivingDirection) {
-        this.drivingDirection = drivingDirection;
-    }
-
-    public ShelterImage getShelterAvatar() {
-        return shelterAvatar;
-    }
-
-    public void setShelterAvatar(ShelterImage shelterAvatar) {
-        this.shelterAvatar = shelterAvatar;
-    }
-
     public String getSecurityContactDetail() {
         return securityContactDetail;
     }
@@ -102,12 +80,12 @@ public class Shelter {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         Shelter shelter = (Shelter) o;
-        return Objects.equals(id, shelter.id) && Objects.equals(shelterName, shelter.shelterName) && Objects.equals(shelterInfo, shelter.shelterInfo) && Objects.equals(drivingDirection, shelter.drivingDirection) && Objects.equals(shelterAvatar, shelter.shelterAvatar) && Objects.equals(securityContactDetail, shelter.securityContactDetail) && Objects.equals(safetyInformation, shelter.safetyInformation);
+        return Objects.equals(id, shelter.id) && Objects.equals(shelterName, shelter.shelterName) && Objects.equals(shelterInfo, shelter.shelterInfo) && Objects.equals(securityContactDetail, shelter.securityContactDetail) && Objects.equals(safetyInformation, shelter.safetyInformation);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, shelterName, shelterInfo, drivingDirection, shelterAvatar, securityContactDetail, safetyInformation);
+        return Objects.hash(id, shelterName, shelterInfo, securityContactDetail, safetyInformation);
     }
 
     @Override
@@ -116,8 +94,6 @@ public class Shelter {
                 "id=" + id +
                 ", shelterName='" + shelterName + '\'' +
                 ", shelterInfo='" + shelterInfo + '\'' +
-                ", drivingDirection=" + drivingDirection +
-                ", shelterAvatar=" + shelterAvatar +
                 ", securityContactDetail='" + securityContactDetail + '\'' +
                 ", safetyInformation='" + safetyInformation + '\'' +
                 '}';

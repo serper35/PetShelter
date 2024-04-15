@@ -1,5 +1,6 @@
 package com.skypro.FirstTeamPetShelter.service;
 
+import com.skypro.FirstTeamPetShelter.model.Shelter;
 import com.skypro.FirstTeamPetShelter.model.ShelterImage;
 
 /**
@@ -20,6 +21,8 @@ public interface ShelterImageService {
      * @throws com.skypro.FirstTeamPetShelter.exception.ShelterImageNotFoundException, если изображение приюта не найдено
      */
     ShelterImage getShelterImage(long id);
+
+    ShelterImage getShelterImage(Shelter shelter);
 
     /**
      * Отредактировать изображения приюта
