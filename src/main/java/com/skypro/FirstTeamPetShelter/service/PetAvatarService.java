@@ -35,13 +35,16 @@ public interface PetAvatarService {
     PetAvatar getPetAvatarByPet(long pet_id);
 
     /**
-     * Получить все аватары питомцев
+     * Получить все аватары питомцев. При наличии большого объема питомцев использовать пагинацию.
+     * @param pageNumber - номер страницы
+     * @param pageSize - количество аватаров на страницу
      * @return          - Возвращает Collection<PetAvatar>
      */
-    Collection<PetAvatar> getAllPetAvatars();
+    // todo проверить как пагинация работает в телеграм-боте
+    Collection<PetAvatar> getAllPetAvatars(int pageNumber, int pageSize);
 
     /**
-     * Отредактировать аватар питомца
+     * Отредактировать аватар питомца - реализация повторяет метод добавления аватара.
      * @param id        - ID аватара питомца
      * @return          - Возвращает PetAvatar
      * @throws com.skypro.FirstTeamPetShelter.exception.PetAvatarNotFoundException, если аватар питомца не найден
