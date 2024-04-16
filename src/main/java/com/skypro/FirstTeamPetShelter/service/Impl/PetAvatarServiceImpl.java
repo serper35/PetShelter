@@ -62,7 +62,8 @@ public class PetAvatarServiceImpl implements PetAvatarService {
 
     @Override
     public PetAvatar getPetAvatarById(long id) {
-        return null;
+        logger.info("Log info: Method getPetAvatarById is invoke.");
+        return petAvatarRepository.findByPetAvatarId(id).orElse(null);
     }
 
     @Override
@@ -72,7 +73,8 @@ public class PetAvatarServiceImpl implements PetAvatarService {
 
     @Override
     public Collection<PetAvatar> getAllPetAvatars() {
-        return List.of();
+        logger.info("Log info: Method getAllPetAvatars is invoke.");
+        return petAvatarRepository.findAll(); //getContent??
     }
 
     @Override
@@ -81,8 +83,10 @@ public class PetAvatarServiceImpl implements PetAvatarService {
     }
 
     @Override
+    // Удаляем по id аватара
     public void deletePetAvatar(long id) {
-
+        logger.info("Log info: Method deletePetAvatar is invoke.");
+        petAvatarRepository.deleteById(id);
     }
 
     private String getExtension(String fileName) {
