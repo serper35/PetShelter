@@ -2,7 +2,6 @@ package com.skypro.FirstTeamPetShelter.model;
 
 import jakarta.persistence.*;
 
-import java.util.Collection;
 import java.util.Objects;
 
 @Entity
@@ -11,29 +10,37 @@ public class User {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     private String userName;
-    private String UserPhoneNumber;
-    @OneToMany(mappedBy = "user")
-    private Collection<Report> userReports;
+    private String userPhoneNumber;
+    private Long userTelegramId;
+    private boolean isContacted;
 
     public User() {
     }
 
     public User(String userName, String userPhoneNumber) {
         this.userName = userName;
-        UserPhoneNumber = userPhoneNumber;
+        this.userPhoneNumber = userPhoneNumber;
     }
 
-    public User(String userName, String userPhoneNumber, Collection<Report> userReports) {
+    public User(String userName, String userPhoneNumber, Long userTelegramId) {
         this.userName = userName;
-        UserPhoneNumber = userPhoneNumber;
-        this.userReports = userReports;
+        this.userPhoneNumber = userPhoneNumber;
+        this.userTelegramId = userTelegramId;
     }
 
-    public User(Long id, String userName, String userPhoneNumber, Collection<Report> userReports) {
+    public User(Long id, String userName, String userPhoneNumber, Long userTelegramId) {
         this.id = id;
         this.userName = userName;
-        UserPhoneNumber = userPhoneNumber;
-        this.userReports = userReports;
+        this.userPhoneNumber = userPhoneNumber;
+        this.userTelegramId = userTelegramId;
+    }
+
+    public User(Long id, String userName, String userPhoneNumber, Long userTelegramId, boolean isContacted) {
+        this.id = id;
+        this.userName = userName;
+        this.userPhoneNumber = userPhoneNumber;
+        this.userTelegramId = userTelegramId;
+        this.isContacted = isContacted;
     }
 
     public Long getId() {
@@ -53,19 +60,27 @@ public class User {
     }
 
     public String getUserPhoneNumber() {
-        return UserPhoneNumber;
+        return userPhoneNumber;
     }
 
     public void setUserPhoneNumber(String userPhoneNumber) {
-        UserPhoneNumber = userPhoneNumber;
+        this.userPhoneNumber = userPhoneNumber;
     }
 
-    public Collection<Report> getUserReports() {
-        return userReports;
+    public Long getUserTelegramId() {
+        return userTelegramId;
     }
 
-    public void setUserReports(Collection<Report> userReports) {
-        this.userReports = userReports;
+    public void setUserTelegramId(Long userTelegramId) {
+        this.userTelegramId = userTelegramId;
+    }
+
+    public boolean isContacted() {
+        return isContacted;
+    }
+
+    public void setContacted(boolean contacted) {
+        isContacted = contacted;
     }
 
     @Override
@@ -73,12 +88,12 @@ public class User {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         User user = (User) o;
-        return Objects.equals(id, user.id) && Objects.equals(userName, user.userName) && Objects.equals(UserPhoneNumber, user.UserPhoneNumber) && Objects.equals(userReports, user.userReports);
+        return isContacted == user.isContacted && Objects.equals(id, user.id) && Objects.equals(userName, user.userName) && Objects.equals(userPhoneNumber, user.userPhoneNumber) && Objects.equals(userTelegramId, user.userTelegramId);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, userName, UserPhoneNumber, userReports);
+        return Objects.hash(id, userName, userPhoneNumber, userTelegramId, isContacted);
     }
 
     @Override
@@ -86,8 +101,9 @@ public class User {
         return "User{" +
                 "id=" + id +
                 ", userName='" + userName + '\'' +
-                ", UserPhoneNumber='" + UserPhoneNumber + '\'' +
-                ", userReports=" + userReports +
+                ", userPhoneNumber='" + userPhoneNumber + '\'' +
+                ", userTelegramId=" + userTelegramId +
+                ", isContacted=" + isContacted +
                 '}';
     }
 }
