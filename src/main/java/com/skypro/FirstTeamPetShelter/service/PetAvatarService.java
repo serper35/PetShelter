@@ -1,8 +1,11 @@
 package com.skypro.FirstTeamPetShelter.service;
 
 import com.skypro.FirstTeamPetShelter.model.PetAvatar;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.io.IOException;
 import java.util.Collection;
+import java.util.List;
 
 /**
  * Сервис аватаров питомцев
@@ -10,10 +13,10 @@ import java.util.Collection;
 public interface PetAvatarService {
     /**
      * Добавить аватар питомца в БД
-     * @param petAvatar - Аватар питомца
-     * @return          - Возвращает PetAvatar
+     * @param petAvatarFile - Аватар питомца
+     * @return          - Возвращает PetAvatarFile
      */
-    PetAvatar addPetAvatar(PetAvatar petAvatar);
+    void addPetAvatar(Long id, MultipartFile petAvatarFile) throws IOException;
 
     /**
      * Получить аватар питомца
@@ -32,13 +35,16 @@ public interface PetAvatarService {
     PetAvatar getPetAvatarByPet(long pet_id);
 
     /**
-     * Получить все аватары питомцев
+     * Получить все аватары питомцев. При наличии большого объема питомцев использовать пагинацию.
+     * @param pageNumber - номер страницы
+     * @param pageSize - количество аватаров на страницу
      * @return          - Возвращает Collection<PetAvatar>
      */
-    Collection<PetAvatar> getAllPetAvatars();
+    // todo проверить как пагинация работает в телеграм-боте
+    Collection<PetAvatar> getAllPetAvatars(int pageNumber, int pageSize);
 
     /**
-     * Отредактировать аватар питомца
+     * Отредактировать аватар питомца - реализация повторяет метод добавления аватара.
      * @param id        - ID аватара питомца
      * @return          - Возвращает PetAvatar
      * @throws com.skypro.FirstTeamPetShelter.exception.PetAvatarNotFoundException, если аватар питомца не найден

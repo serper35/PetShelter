@@ -5,10 +5,11 @@ import com.skypro.FirstTeamPetShelter.repository.PetServiceRepository;
 import com.skypro.FirstTeamPetShelter.service.PetService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.stereotype.Service;
 
 import java.util.Collection;
 import java.util.List;
-
+@Service
 public class PetServiceImpl implements PetService {
 
     public PetServiceImpl(PetServiceRepository petServiceRepository) {
