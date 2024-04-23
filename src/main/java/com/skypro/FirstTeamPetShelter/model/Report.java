@@ -18,8 +18,8 @@ public class Report {
     private String changeBehavior;
     private Date reportDate;
     @ManyToOne
-    @JoinColumn(name = "user_id")
-    private User user;
+    @JoinColumn(name = "adopter_id")
+    private Adopter adopter;
 
     public Report() {
     }
@@ -39,22 +39,22 @@ public class Report {
         this.changeBehavior = changeBehavior;
     }
 
-    public Report(Long id, byte[] petPhoto, String petDiet, String petHealthAndAdaptation, String changeBehavior, Date reportDate, User user) {
+    public Report(Long id, byte[] petPhoto, String petDiet, String petHealthAndAdaptation, String changeBehavior, Date reportDate, Adopter adopter) {
         this.id = id;
         this.petPhoto = petPhoto;
         this.petDiet = petDiet;
         this.petHealthAndAdaptation = petHealthAndAdaptation;
         this.changeBehavior = changeBehavior;
         this.reportDate = reportDate;
-        this.user = user;
+        this.adopter = adopter;
     }
 
-    public Report(byte[] petPhoto, String petDiet, String petHealthAndAdaptation, String changeBehavior, User user) {
+    public Report(byte[] petPhoto, String petDiet, String petHealthAndAdaptation, String changeBehavior, Adopter adopter) {
         this.petPhoto = petPhoto;
         this.petDiet = petDiet;
         this.petHealthAndAdaptation = petHealthAndAdaptation;
         this.changeBehavior = changeBehavior;
-        this.user = user;
+        this.adopter = adopter;
     }
 
     public Long getId() {
@@ -97,12 +97,12 @@ public class Report {
         this.changeBehavior = changeBehavior;
     }
 
-    public User getUser() {
-        return user;
+    public Adopter getAdopter() {
+        return adopter;
     }
 
-    public void setUser(User user) {
-        this.user = user;
+    public void setAdopter(Adopter adopter) {
+        this.adopter = adopter;
     }
 
     public Date getReportDate() {
@@ -118,12 +118,12 @@ public class Report {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         Report report = (Report) o;
-        return Objects.equals(id, report.id) && Objects.deepEquals(petPhoto, report.petPhoto) && Objects.equals(petDiet, report.petDiet) && Objects.equals(petHealthAndAdaptation, report.petHealthAndAdaptation) && Objects.equals(changeBehavior, report.changeBehavior) && Objects.equals(reportDate, report.reportDate) && Objects.equals(user, report.user);
+        return Objects.equals(id, report.id) && Objects.deepEquals(petPhoto, report.petPhoto) && Objects.equals(petDiet, report.petDiet) && Objects.equals(petHealthAndAdaptation, report.petHealthAndAdaptation) && Objects.equals(changeBehavior, report.changeBehavior) && Objects.equals(reportDate, report.reportDate) && Objects.equals(adopter, report.adopter);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, Arrays.hashCode(petPhoto), petDiet, petHealthAndAdaptation, changeBehavior, reportDate, user);
+        return Objects.hash(id, Arrays.hashCode(petPhoto), petDiet, petHealthAndAdaptation, changeBehavior, reportDate, adopter);
     }
 
     @Override
@@ -135,7 +135,7 @@ public class Report {
                 ", petHealthAndAdaptation='" + petHealthAndAdaptation + '\'' +
                 ", changeBehavior='" + changeBehavior + '\'' +
                 ", reportDate=" + reportDate +
-                ", user=" + user +
+                ", adopter=" + adopter +
                 '}';
     }
 }
