@@ -25,6 +25,14 @@ public interface UserService {
     User getUser(long id);
 
     /**
+     * Получить пользователя по Telegram ID
+     * @param telegramId - ID пользователя в Telegram
+     * @return           - Возвращает пользователя
+     * @throws com.skypro.FirstTeamPetShelter.exception.UserNotFoundException, если User не найден
+     */
+    User getUserByTelegramId(long telegramId);
+
+    /**
      * Получить всех пользователей из БД
      * @return      - Возвращает Collection<User>
      */
