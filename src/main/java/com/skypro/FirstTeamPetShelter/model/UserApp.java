@@ -5,7 +5,7 @@ import jakarta.persistence.*;
 import java.util.Objects;
 
 @Entity
-public class User {
+public class UserApp {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -14,28 +14,28 @@ public class User {
     private Long userTelegramId;
     private boolean isContacted;
 
-    public User() {
+    public UserApp() {
     }
 
-    public User(String userName, String userPhoneNumber) {
+    public UserApp(String userName, String userPhoneNumber) {
         this.userName = userName;
         this.userPhoneNumber = userPhoneNumber;
     }
 
-    public User(String userName, String userPhoneNumber, Long userTelegramId) {
+    public UserApp(String userName, String userPhoneNumber, Long userTelegramId) {
         this.userName = userName;
         this.userPhoneNumber = userPhoneNumber;
         this.userTelegramId = userTelegramId;
     }
 
-    public User(Long id, String userName, String userPhoneNumber, Long userTelegramId) {
+    public UserApp(Long id, String userName, String userPhoneNumber, Long userTelegramId) {
         this.id = id;
         this.userName = userName;
         this.userPhoneNumber = userPhoneNumber;
         this.userTelegramId = userTelegramId;
     }
 
-    public User(Long id, String userName, String userPhoneNumber, Long userTelegramId, boolean isContacted) {
+    public UserApp(Long id, String userName, String userPhoneNumber, Long userTelegramId, boolean isContacted) {
         this.id = id;
         this.userName = userName;
         this.userPhoneNumber = userPhoneNumber;
@@ -87,8 +87,8 @@ public class User {
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
-        User user = (User) o;
-        return isContacted == user.isContacted && Objects.equals(id, user.id) && Objects.equals(userName, user.userName) && Objects.equals(userPhoneNumber, user.userPhoneNumber) && Objects.equals(userTelegramId, user.userTelegramId);
+        UserApp userApp = (UserApp) o;
+        return isContacted == userApp.isContacted && Objects.equals(id, userApp.id) && Objects.equals(userName, userApp.userName) && Objects.equals(userPhoneNumber, userApp.userPhoneNumber) && Objects.equals(userTelegramId, userApp.userTelegramId);
     }
 
     @Override
@@ -98,7 +98,7 @@ public class User {
 
     @Override
     public String toString() {
-        return "User{" +
+        return "UserApp{" +
                 "id=" + id +
                 ", userName='" + userName + '\'' +
                 ", userPhoneNumber='" + userPhoneNumber + '\'' +

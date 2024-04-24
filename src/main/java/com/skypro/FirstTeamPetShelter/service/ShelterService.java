@@ -31,11 +31,12 @@ public interface ShelterService {
 
     /**
      * Отредактировать приют
-     * @param id        - ID приюта
-     * @return          - Возвращает Shelter
+     *
+     * @param shelter - приют
+     * @return - Возвращает Shelter
      * @throws com.skypro.FirstTeamPetShelter.exception.ShelterNotFoundException, если приют не найден
      */
-    Shelter editShelter(long id);
+    Shelter editShelter(Shelter shelter);
 
     /**
      * Удалить приют

@@ -1,6 +1,6 @@
 package com.skypro.FirstTeamPetShelter.service;
 
-import com.skypro.FirstTeamPetShelter.model.User;
+import com.skypro.FirstTeamPetShelter.model.UserApp;
 
 import java.util.Collection;
 
@@ -10,46 +10,47 @@ import java.util.Collection;
 public interface UserService {
     /**
      * Добавить пользователя в БД
-     * @param user  - Пользователь (User)
-     * @return      - Возвращает User
-     * @throws com.skypro.FirstTeamPetShelter.exception.UserAlreadyAddedException, если такой User уже есть в БД
+     * @param userApp  - Пользователь (UserApp)
+     * @return      - Возвращает UserApp
+     * @throws com.skypro.FirstTeamPetShelter.exception.UserAlreadyAddedException, если такой UserApp уже есть в БД
      */
-    User addUser(User user);
+    UserApp addUser(UserApp userApp);
 
     /**
      * Получить пользователя из БД
      * @param id    - ID пользователя
-     * @return      - Возвращает User
-     * @throws com.skypro.FirstTeamPetShelter.exception.UserNotFoundException, если User не найден
+     * @return      - Возвращает UserApp
+     * @throws com.skypro.FirstTeamPetShelter.exception.UserNotFoundException, если UserApp не найден
      */
-    User getUser(long id);
-
-    /**
-     * Получить пользователя по Telegram ID
-     * @param telegramId - ID пользователя в Telegram
-     * @return           - Возвращает пользователя
-     * @throws com.skypro.FirstTeamPetShelter.exception.UserNotFoundException, если User не найден
-     */
-    User getUserByTelegramId(long telegramId);
+    UserApp getUser(long id);
 
     /**
      * Получить всех пользователей из БД
-     * @return      - Возвращает Collection<User>
+     * @return      - Возвращает Collection<UserApp>
      */
-    Collection<User> getAllUser();
+    Collection<UserApp> getAllUser();
 
     /**
      * Отредактировать пользователя
-     * @param id    - ID пользователя
-     * @return      - Возвращает User
-     * @throws com.skypro.FirstTeamPetShelter.exception.UserNotFoundException, если User не найден
+     * @param userApp    - ID пользователя
+     * @return      - Возвращает UserApp
+     * @throws com.skypro.FirstTeamPetShelter.exception.UserNotFoundException, если UserApp не найден
      */
-    User editUser(long id);
+    UserApp editUser(UserApp userApp);
 
     /**
      * Удалить пользователя
      * @param id    - ID пользователя
-     * @throws com.skypro.FirstTeamPetShelter.exception.UserNotFoundException, если User не найден
+     * @throws com.skypro.FirstTeamPetShelter.exception.UserNotFoundException, если UserApp не найден
      */
     void deleteUser(long id);
+
+    /**
+     * Получить пользователя по Telegram ID
+     *
+     * @param telegramId - ID пользователя в Telegram
+     * @return - Возвращает пользователя
+     * @throws com.skypro.FirstTeamPetShelter.exception.UserNotFoundException, если UserApp не найден
+     */
+    UserApp getUserByTelegramId(long telegramId);
 }
