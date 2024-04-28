@@ -20,4 +20,5 @@ public interface BotService {
     List<UserApp> getUsersCallingVolunteer();
     List<Adopter> getAdoptersCallingVolunteer();
     List<Adopter> getAdoptersReportCheck();
+    List<UserApp> getUsersBecomeAdoptive();
 }

@@ -19,7 +19,7 @@ import java.util.List;
 public class TelegramBotUpdatesListener implements UpdatesListener {
 
     private final Logger logger = LoggerFactory.getLogger(TelegramBotUpdatesListener.class);
-    
+
     private long shelter_id;
 
     @Autowired
@@ -56,68 +56,64 @@ public class TelegramBotUpdatesListener implements UpdatesListener {
                     // если новый, то приветствие и список приютов
                     switch (botService.getVisitorRole(update.message().from().id())) {
                         case NEWBIE -> {
-                            try {
-                                String messageText = infoService.getMessage("Start");
-                                botService.sendResponseFromUpdate(telegramBot, update, messageText, Menu.START);
-                            } catch (RuntimeException e) {
-                                logger.error(e.getMessage());
-                                String messageText = infoService.getMessage("StartError");
-                                botService.sendResponseFromUpdate(telegramBot, update, messageText, null);
-                            }
+                            String messageText = infoService.getMessage("Start");
+                            botService.sendResponseFromUpdate(telegramBot, update, messageText, Menu.START);
                         }
                         case USER -> {
                             // если юзер, то приветствие и проверка в бд связывались ли с ним. если в бд не связывались, то вопрос к юзеру связывались?
                             if (userService.getUserByTelegramId(update.message().from().id()).isContacted()) {
-                                try {
-                                    String messageText = infoService.getMessage("Start");
-                                    botService.sendResponseFromUpdate(telegramBot, update, messageText, Menu.START);
-                                } catch (RuntimeException e) {
-                                    logger.error(e.getMessage());
-                                    String messageText = infoService.getMessage("StartError");
-                                    botService.sendResponseFromUpdate(telegramBot, update, messageText, null);
-                                }
+                                String messageText = infoService.getMessage("Start");
+                                botService.sendResponseFromUpdate(telegramBot, update, messageText, Menu.START);
                             } else {
-                                try {
-                                    String messageText = infoService.getMessage("StartNotContacted");
-                                    botService.sendResponseFromUpdate(telegramBot, update, messageText, Menu.ANSWER_CONTACTED);
-                                } catch (RuntimeException e) {
-                                    logger.error(e.getMessage());
-                                    String messageText = infoService.getMessage("StartError");
-                                    botService.sendResponseFromUpdate(telegramBot, update, messageText, null);
-                                }
-                                String messageText = "Здравствуйте! С вами ещё не связывались?";
-                                SendMessage sendMessage = new SendMessage(update.message().chat().id(), messageText);
-                                sendMessage.replyMarkup(botMenuService.getAnswerContactedMenu());
-                                SendResponse sendResponse = telegramBot.execute(sendMessage);
+                                String messageText = infoService.getMessage("StartNotContacted");
+                                botService.sendResponseFromUpdate(telegramBot, update, messageText, Menu.ANSWER_CONTACTED);
                             }
                         }
                         case ADOPTER -> {
                             // если усыновитель, то проверка когда был отчет, сколько времени. если нужен отчет, то просим, если рано то рано говорим, и выдаем в обоих случаях меню усыновителя
                             // если усыновитель и пришла дата окончания проверки и нет продления, а также нарушений, то поздравление иначе отказ и возврат животного
-
+                            // ToDo поправить БД, внести изменения в liquibase, а затем вернуться сюда
                         }
                         case VOLUNTEER -> {
-                            // если волонтер, то ищем кто хочет связаться и выдаем список кнопок связаться + Кнопка посмотреть отчеты
-                            String helloVolunteer = infoService.getMessage("Здравствуйте. Хотите поработать сегодня!?");
-                            SendMessage sendMessage = new SendMessage(update.message().chat().id(), helloVolunteer);
-                            SendResponse sendResponse = telegramBot.execute(sendMessage);
+                            // Приветствие волонтера
+                            String helloVolunteer = infoService.getMessage("HelloVolunteer");
+                            botService.sendResponseFromUpdate(telegramBot, update, helloVolunteer, null);
 
+                            // Вывод списка пользователей, зовущих волонтера, если таковые есть
                             if (botService.getUsersCallingVolunteer() != null) {
-                                String messageText = "Вот список новых пользователей, которые хотят связаться с волонтёром\n" +
-                                        "Выберите пользователя, с которым готовы поговорить.";
+                                String messageText = infoService.getMessage("CallingUsers");
+                                botService.sendResponseFromUpdate(telegramBot, update, messageText, Menu.CALLING_USERS);
                             } else {
-                                String messageText = "Пользователей, которым нужна помощь нет.";
+                                String messageText = infoService.getMessage("NotCallingUsers");
+                                botService.sendResponseFromUpdate(telegramBot, update, messageText, null);
                             }
+
+                            // Вывод списка усыновителей, зовущих волонтера, если таковые есть
                             if (botService.getAdoptersCallingVolunteer() != null) {
-                                String messageText = "Вот список усыновителей, которые хотят связаться с волонтёром\n" +
-                                        "Выберите пользователя, с которым готовы поговорить.";
+                                String messageText = infoService.getMessage("CallingAdopters");
+                                botService.sendResponseFromUpdate(telegramBot, update, messageText, Menu.CALLING_ADOPTERS);
                             } else {
-                                String messageText = "Усыновителей, которым нужна помощь нет!";
+                                String messageText = infoService.getMessage("NotCallingAdopters");
+                                botService.sendResponseFromUpdate(telegramBot, update, messageText, null);
                             }
+
+                            // Вывод списка усыновителей, чьи отчёты нужно проверить сегодня, если таковые есть
                             if (botService.getAdoptersReportCheck() != null) {
-                                String messageText = "Список усыновителей, чьи отчёты нужно проверить.";
+                                String messageText = infoService.getMessage("AdoptersReportCheck");
+                                botService.sendResponseFromUpdate(telegramBot, update, messageText, Menu.CHECK_REPORTS);
+                            } else {
+                                String messageText = infoService.getMessage("NotAdoptersReportCheck");
+                                botService.sendResponseFromUpdate(telegramBot, update, messageText, null);
                             }
-                            String messageText = "Здравствуйте! ";
+
+                            // Вывод списка пользователей, желающих стать усыновителями, если таковые есть
+                            if (botService.getUsersBecomeAdoptive() != null) {
+                                String messageText = infoService.getMessage("UsersBecomeAdoptive");
+                                botService.sendResponseFromUpdate(telegramBot, update, messageText, Menu.USERS_BECOME_ADOPTIVE);
+                            } else {
+                                String messageText = infoService.getMessage("NotUsersBecomeAdoptive");
+                                botService.sendResponseFromUpdate(telegramBot, update, messageText, null);
+                            }
                         }
                     }
                 }
