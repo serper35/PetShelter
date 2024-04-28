@@ -9,6 +9,7 @@ import jakarta.transaction.Transactional;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -72,14 +73,33 @@ public class PetAvatarServiceImpl implements PetAvatarService {
     }
 
     @Override
-    public Collection<PetAvatar> getAllPetAvatars() {
+    public Collection<PetAvatar> getAllPetAvatars(int pageNumber, int pageSize) {
         logger.info("Log info: Method getAllPetAvatars is invoke.");
-        return petAvatarRepository.findAll(); //getContent??
+        PageRequest pageRequest = PageRequest.of(pageNumber - 1, pageSize);
+        return petAvatarRepository.findAll(pageRequest).getContent();
     }
 
     @Override
-    public PetAvatar editPetAvatar(long id) {
-        return null;
+    public void  editPetAvatar(Long id, MultipartFile petAvatarFile) throws IOException { // Та же логика, что и при загрузке нового аватара, предлагаю удалить
+        logger.info("Log info: Method uploadAvatar is invoke.");
+        Pet pet = petService.getPet(id);
+        Path pathFile = Path.of(petAvatarsDir, pet + "." + getExtension(petAvatarFile.getOriginalFilename()));
+        Files.createDirectories(pathFile.getParent());
+        Files.deleteIfExists(pathFile);
+        try (InputStream inputStream = petAvatarFile.getInputStream();
+             OutputStream outputStream = Files.newOutputStream(pathFile, CREATE_NEW);
+             BufferedInputStream bufferedInputStream = new BufferedInputStream(inputStream, 1024);
+             BufferedOutputStream bufferedOutputStream = new BufferedOutputStream(outputStream, 1024);
+        ) {
+            bufferedInputStream.transferTo(bufferedOutputStream);
+        }
+        PetAvatar petAvatar = findPetAvatar(id);
+        petAvatar.setPet(pet);
+        petAvatar.setFilePath(pathFile.toString());
+        petAvatar.setFileSize(petAvatarFile.getSize());
+        petAvatar.setMediaType(petAvatarFile.getContentType());
+        petAvatar.setSmallAvatar(petAvatarFile.getBytes());
+        petAvatarRepository.save(petAvatar);
     }
 
     @Override
