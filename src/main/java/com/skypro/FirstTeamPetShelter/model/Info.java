@@ -11,6 +11,7 @@ public class Info {
     private Long id;
     @Column(unique = true)
     private String keyWord;
+    @Column(length = 1024)
     private String message;
 
     public Info() {

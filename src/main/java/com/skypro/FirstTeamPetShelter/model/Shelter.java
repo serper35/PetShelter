@@ -1,9 +1,6 @@
 package com.skypro.FirstTeamPetShelter.model;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
+import jakarta.persistence.*;
 
 import java.util.Objects;
 
@@ -13,8 +10,11 @@ public class Shelter {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     private String shelterName;
+    @Column(length = 512)
     private String shelterInfo;             // Расписание работы и адрес
+    @Column(length = 2048)
     private String securityContactDetail;   // Контактные данные охраны
+    @Column(length = 65535)
     private String safetyInformation;       // Информация по безопасности на территории приюта
 
     public Shelter() {
