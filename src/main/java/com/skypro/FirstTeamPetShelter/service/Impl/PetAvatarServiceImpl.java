@@ -1,4 +1,4 @@
-package com.skypro.FirstTeamPetShelter.service.impl;
+package com.skypro.FirstTeamPetShelter.service.Impl;
 
 import com.skypro.FirstTeamPetShelter.model.Pet;
 import com.skypro.FirstTeamPetShelter.model.PetAvatar;
@@ -16,7 +16,6 @@ import java.io.*;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.Collection;
-import java.util.List;
 
 import static java.nio.file.StandardOpenOption.CREATE_NEW;
 
@@ -63,7 +62,7 @@ public class PetAvatarServiceImpl implements PetAvatarService {
     @Override
     public PetAvatar getPetAvatarById(long id) {
         logger.info("Log info: Method getPetAvatarById is invoke.");
-        return petAvatarRepository.findByPetAvatarId(id).orElse(null);
+        return petAvatarRepository.findById(id).orElse(null);
     }
 
     @Override
@@ -72,7 +71,7 @@ public class PetAvatarServiceImpl implements PetAvatarService {
     }
 
     @Override
-    public Collection<PetAvatar> getAllPetAvatars() {
+    public Collection<PetAvatar> getAllPetAvatars(int pageNumber, int pageSize) {
         logger.info("Log info: Method getAllPetAvatars is invoke.");
         return petAvatarRepository.findAll(); //getContent??
     }
@@ -96,6 +95,6 @@ public class PetAvatarServiceImpl implements PetAvatarService {
 
     public PetAvatar findPetAvatar (Long id)  {
         logger.info("Log info: Method findPetAvatar is invoke.");
-        return petAvatarRepository.findByPetAvatarId(id).orElse(new PetAvatar());
+        return petAvatarRepository.findById(id).orElse(new PetAvatar());
     }
 }
