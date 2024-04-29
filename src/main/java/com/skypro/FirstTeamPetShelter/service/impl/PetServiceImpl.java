@@ -1,4 +1,4 @@
-package com.skypro.FirstTeamPetShelter.service.impl;
+package com.skypro.FirstTeamPetShelter.service.Impl;
 
 import com.skypro.FirstTeamPetShelter.model.Pet;
 import com.skypro.FirstTeamPetShelter.repository.PetServiceRepository;
@@ -8,7 +8,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 
 import java.util.Collection;
-import java.util.List;
+
 @Service
 public class PetServiceImpl implements PetService {
 
