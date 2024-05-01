@@ -32,11 +32,11 @@ public interface ReportService {
     Collection<Report> getReportsByDate(Date date);
 
     /**
-     * Получить список отчетов по пользователю
-     * @param user_id   - ID пользователя
+     * Получить список отчетов по усыновителю
+     * @param adopter_id   - ID усыновителя
      * @return          - Возвращает Collection<Report>
      */
-    Collection<Report> getReportsByUser(long user_id);
+    Collection<Report> getReportsByAdopter(long adopter_id);
 
     /**
      * Получить все отчеты
@@ -46,11 +46,12 @@ public interface ReportService {
 
     /**
      * Отредактировать отчет
-     * @param id    - ID отчета
-     * @return      - Возвращает Report
+     * @param id     - ID отчета
+     * @param report - Report
+     * @return       - Возвращает Report
      * @throws com.skypro.FirstTeamPetShelter.exception.ReportNotFoundException, если отчет не найден
      */
-    Report editReport(long id);
+    Report editReport(long id, Report report);
 
     /**
      * Удалить отчет
