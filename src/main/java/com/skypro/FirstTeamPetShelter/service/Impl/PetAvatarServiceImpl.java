@@ -9,6 +9,7 @@ import jakarta.transaction.Transactional;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -73,7 +74,8 @@ public class PetAvatarServiceImpl implements PetAvatarService {
     @Override
     public Collection<PetAvatar> getAllPetAvatars(int pageNumber, int pageSize) {
         logger.info("Log info: Method getAllPetAvatars is invoke.");
-        return petAvatarRepository.findAll(); //getContent??
+        PageRequest pageRequest = PageRequest.of(pageNumber - 1, pageSize);
+        return petAvatarRepository.findAll(pageRequest).getContent(); //getContent??
     }
 
     @Override
