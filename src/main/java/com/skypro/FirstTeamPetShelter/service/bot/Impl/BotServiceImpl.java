@@ -1,4 +1,4 @@
-package com.skypro.FirstTeamPetShelter.service.Impl;
+package com.skypro.FirstTeamPetShelter.service.bot.Impl;
 
 import com.pengrad.telegrambot.TelegramBot;
 import com.pengrad.telegrambot.model.Update;
@@ -8,11 +8,11 @@ import com.skypro.FirstTeamPetShelter.model.UserApp;
 import com.skypro.FirstTeamPetShelter.repository.AdopterRepository;
 import com.skypro.FirstTeamPetShelter.repository.UserRepository;
 import com.skypro.FirstTeamPetShelter.repository.VolunteerRepository;
-import com.skypro.FirstTeamPetShelter.service.BotMenuService;
-import com.skypro.FirstTeamPetShelter.service.BotService;
+import com.skypro.FirstTeamPetShelter.service.bot.BotMenuService;
+import com.skypro.FirstTeamPetShelter.service.bot.BotService;
 import com.skypro.FirstTeamPetShelter.service.InfoService;
-import com.skypro.FirstTeamPetShelter.service.helper.Menu;
-import com.skypro.FirstTeamPetShelter.service.helper.Role;
+import com.skypro.FirstTeamPetShelter.service.bot.helper.Menu;
+import com.skypro.FirstTeamPetShelter.service.bot.helper.Role;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;

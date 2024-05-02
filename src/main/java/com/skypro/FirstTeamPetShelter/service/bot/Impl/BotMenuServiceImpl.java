@@ -1,10 +1,10 @@
-package com.skypro.FirstTeamPetShelter.service.Impl;
+package com.skypro.FirstTeamPetShelter.service.bot.Impl;
 
 import com.pengrad.telegrambot.model.request.*;
 import com.skypro.FirstTeamPetShelter.model.Shelter;
 import com.skypro.FirstTeamPetShelter.repository.ShelterRepository;
-import com.skypro.FirstTeamPetShelter.service.BotMenuService;
-import com.skypro.FirstTeamPetShelter.service.helper.Menu;
+import com.skypro.FirstTeamPetShelter.service.bot.BotMenuService;
+import com.skypro.FirstTeamPetShelter.service.bot.helper.Menu;
 import org.springframework.stereotype.Service;
 
 import java.util.List;

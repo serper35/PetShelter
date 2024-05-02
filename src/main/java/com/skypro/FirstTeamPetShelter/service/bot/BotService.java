@@ -1,11 +1,11 @@
-package com.skypro.FirstTeamPetShelter.service;
+package com.skypro.FirstTeamPetShelter.service.bot;
 
 import com.pengrad.telegrambot.TelegramBot;
 import com.pengrad.telegrambot.model.Update;
 import com.skypro.FirstTeamPetShelter.model.Adopter;
 import com.skypro.FirstTeamPetShelter.model.UserApp;
-import com.skypro.FirstTeamPetShelter.service.helper.Menu;
-import com.skypro.FirstTeamPetShelter.service.helper.Role;
+import com.skypro.FirstTeamPetShelter.service.bot.helper.Menu;
+import com.skypro.FirstTeamPetShelter.service.bot.helper.Role;
 
 import java.util.List;
 

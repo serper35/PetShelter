@@ -1,8 +1,7 @@
-package com.skypro.FirstTeamPetShelter.service;
+package com.skypro.FirstTeamPetShelter.service.bot;
 
 import com.pengrad.telegrambot.model.request.InlineKeyboardMarkup;
-import com.pengrad.telegrambot.model.request.Keyboard;
-import com.skypro.FirstTeamPetShelter.service.helper.Menu;
+import com.skypro.FirstTeamPetShelter.service.bot.helper.Menu;
 
 public interface BotMenuService {
     InlineKeyboardMarkup getStartMenu();
