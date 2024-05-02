@@ -24,3 +24,6 @@ INSERT INTO shelter (shelter_name, shelter_info, security_contact_detail, safety
 
 -- changeset v.aliev:4
 INSERT INTO shelter (shelter_name, shelter_info, security_contact_detail, safety_information) VALUES ('Мягкие лапки', 'Время работы: с 09:00 до 19:00 по будням и с 10:00 до 15:00 в субботу и в воскресенье. Адрес: Кошачий переулок, 2.', 'Для того чтобы выписать пропуск на автомобиль свяжитесь с охранной приюта по электронной почте security@lapki.cat', 'У наших кошечек довольно острые коготочки, поэтому не рекомендуем просовывать в клетки пальцы и близко к ним подходить во избежание зацепа выступающих частей одежды лапками наших кошек. Запрещено курить и быть в алкогольном и/или наркотическом опьянении.');
+
+-- changeset v.aliev:5
+INSERT INTO info (key_word, message) VALUES ('HelloAdopter', 'Здравствуйте, {username}! Надеемся у вас с вашим четвероногим другом всё хорошо!');
