@@ -8,8 +8,8 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDateTime;
 import java.util.Collection;
-import java.util.Date;
 
 @Service
 public class ReportServiceImpl implements ReportService {
@@ -35,7 +35,7 @@ public class ReportServiceImpl implements ReportService {
     }
 
     @Override
-    public Collection<Report> getReportsByDate(Date date) {
+    public Collection<Report> getReportsByDate(LocalDateTime date) {
         return reportRepository.findAllByReportDate(date);
     }
 

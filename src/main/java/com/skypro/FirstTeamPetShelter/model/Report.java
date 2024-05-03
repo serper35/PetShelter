@@ -2,8 +2,8 @@ package com.skypro.FirstTeamPetShelter.model;
 
 import jakarta.persistence.*;
 
+import java.time.LocalDateTime;
 import java.util.Arrays;
-import java.util.Date;
 import java.util.Objects;
 
 @Entity
@@ -16,7 +16,7 @@ public class Report {
     private String petDiet;
     private String petHealthAndAdaptation;
     private String changeBehavior;
-    private Date reportDate;
+    private LocalDateTime reportDate;
     @ManyToOne
     @JoinColumn(name = "adopter_id")
     private Adopter adopter;
@@ -39,7 +39,7 @@ public class Report {
         this.changeBehavior = changeBehavior;
     }
 
-    public Report(Long id, byte[] petPhoto, String petDiet, String petHealthAndAdaptation, String changeBehavior, Date reportDate, Adopter adopter) {
+    public Report(Long id, byte[] petPhoto, String petDiet, String petHealthAndAdaptation, String changeBehavior, LocalDateTime reportDate, Adopter adopter) {
         this.id = id;
         this.petPhoto = petPhoto;
         this.petDiet = petDiet;
@@ -105,11 +105,11 @@ public class Report {
         this.adopter = adopter;
     }
 
-    public Date getReportDate() {
+    public LocalDateTime getReportDate() {
         return reportDate;
     }
 
-    public void setReportDate(Date reportDate) {
+    public void setReportDate(LocalDateTime reportDate) {
         this.reportDate = reportDate;
     }
 
