@@ -1,12 +1,11 @@
 package com.skypro.FirstTeamPetShelter.service.bot.helper;
 
 public enum Menu {
-    START,
-    ANSWER_CONTACTED,
-    CALLING_USERS,
-    CALLING_ADOPTERS,
-    CHECK_REPORTS,
-    USERS_BECOME_ADOPTIVE,
-    SHELTER,
-    PET,
+    START,                          // Стартовое меню (список приютов)
+    ANSWER_CONTACTED,               // Вопрос пользователю, связывались ли с ним
+    CALLING_USERS,                  // Список пользователей, звавших волонтёра
+    CALLING_ADOPTERS,               // Список усыновителей, звавших волонтёра
+    CHECK_REPORTS,                  // Отчеты, которые ещё не проверялись
+    USERS_BECOME_ADOPTIVE,          // Список потенциальных усыновителей
+    ADOPTER_SEND_REPORT             // Отправить отчёт
 }
