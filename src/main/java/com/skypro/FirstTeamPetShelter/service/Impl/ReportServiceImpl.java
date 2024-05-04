@@ -40,6 +40,11 @@ public class ReportServiceImpl implements ReportService {
     }
 
     @Override
+    public Collection<Report> getReportsByAdopterAndReviewed(long adopter_id, boolean isReviewed) {
+        return reportRepository.getReportsByAdopterIdAndIsReviewed(adopter_id, isReviewed);
+    }
+
+    @Override
     public Collection<Report> getReportsByAdopter(long adopter_id) {
         return reportRepository.findAllByAdopterId(adopter_id);
     }

@@ -17,6 +17,7 @@ public class Report {
     private String petHealthAndAdaptation;
     private String changeBehavior;
     private LocalDateTime reportDate;
+    private boolean isReviewed;
     @ManyToOne
     @JoinColumn(name = "adopter_id")
     private Adopter adopter;
@@ -49,11 +50,12 @@ public class Report {
         this.adopter = adopter;
     }
 
-    public Report(byte[] petPhoto, String petDiet, String petHealthAndAdaptation, String changeBehavior, Adopter adopter) {
+    public Report(byte[] petPhoto, String petDiet, String petHealthAndAdaptation, String changeBehavior, boolean isReviewed, Adopter adopter) {
         this.petPhoto = petPhoto;
         this.petDiet = petDiet;
         this.petHealthAndAdaptation = petHealthAndAdaptation;
         this.changeBehavior = changeBehavior;
+        this.isReviewed = isReviewed;
         this.adopter = adopter;
     }
 
@@ -97,6 +99,14 @@ public class Report {
         this.changeBehavior = changeBehavior;
     }
 
+    public boolean isReviewed() {
+        return isReviewed;
+    }
+
+    public void setReviewed(boolean reviewed) {
+        isReviewed = reviewed;
+    }
+
     public Adopter getAdopter() {
         return adopter;
     }
@@ -118,12 +128,12 @@ public class Report {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         Report report = (Report) o;
-        return Objects.equals(id, report.id) && Objects.deepEquals(petPhoto, report.petPhoto) && Objects.equals(petDiet, report.petDiet) && Objects.equals(petHealthAndAdaptation, report.petHealthAndAdaptation) && Objects.equals(changeBehavior, report.changeBehavior) && Objects.equals(reportDate, report.reportDate) && Objects.equals(adopter, report.adopter);
+        return isReviewed == report.isReviewed && Objects.equals(id, report.id) && Objects.deepEquals(petPhoto, report.petPhoto) && Objects.equals(petDiet, report.petDiet) && Objects.equals(petHealthAndAdaptation, report.petHealthAndAdaptation) && Objects.equals(changeBehavior, report.changeBehavior) && Objects.equals(reportDate, report.reportDate) && Objects.equals(adopter, report.adopter);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, Arrays.hashCode(petPhoto), petDiet, petHealthAndAdaptation, changeBehavior, reportDate, adopter);
+        return Objects.hash(id, Arrays.hashCode(petPhoto), petDiet, petHealthAndAdaptation, changeBehavior, reportDate, isReviewed, adopter);
     }
 
     @Override
@@ -135,6 +145,7 @@ public class Report {
                 ", petHealthAndAdaptation='" + petHealthAndAdaptation + '\'' +
                 ", changeBehavior='" + changeBehavior + '\'' +
                 ", reportDate=" + reportDate +
+                ", isReviewed=" + isReviewed +
                 ", adopter=" + adopter +
                 '}';
     }

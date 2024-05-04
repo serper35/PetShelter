@@ -32,6 +32,15 @@ public interface ReportService {
     Collection<Report> getReportsByDate(LocalDateTime dateTime);
 
     /**
+     * Получение отчета по усыновителю, статусу
+     *
+     * @param adopter_id - ID усыновителя
+     * @param isReview   - статус (true - рассмотрен, false - не рассмотрен)
+     * @return - Report
+     */
+    Collection<Report> getReportsByAdopterAndReviewed(long adopter_id, boolean isReview);
+
+    /**
      * Получить список отчетов по усыновителю
      * @param adopter_id   - ID усыновителя
      * @return          - Возвращает Collection<Report>

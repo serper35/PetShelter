@@ -11,4 +11,6 @@ import java.util.List;
 public interface ReportRepository extends JpaRepository<Report, Long> {
     List<Report> findAllByReportDate(LocalDateTime date);
     List<Report> findAllByAdopterId(Long id);
+
+    List<Report> getReportsByAdopterIdAndIsReviewed(Long adopterId, boolean isReviewed);
 }
