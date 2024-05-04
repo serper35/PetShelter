@@ -27,3 +27,8 @@ INSERT INTO shelter (shelter_name, shelter_info, security_contact_detail, safety
 
 -- changeset v.aliev:5
 INSERT INTO info (key_word, message) VALUES ('HelloAdopter', 'Здравствуйте, {username}! Надеемся у вас с вашим четвероногим другом всё хорошо!');
+
+-- changeset v.aliev:6
+INSERT INTO info (key_word, message) VALUES ('ReportIsReviewedFalse', 'Уважаемый(ая) {username}, ваш(и) отчёт(ы) скоро будут проверен(ы) волонтёрами.');
+INSERT INTO info (key_word, message) VALUES ('ReportsIsReviewedTrue', 'Все отчёты на сегодня проверены.');
+INSERT INTO info (key_word, message) VALUES ('ReportNotSend', 'Вы ещё не отправили отчёт сегодня.');
