@@ -12,10 +12,12 @@ import com.skypro.FirstTeamPetShelter.service.bot.BotHandler;
 import com.skypro.FirstTeamPetShelter.service.bot.BotService;
 import com.skypro.FirstTeamPetShelter.service.bot.helper.Menu;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 
+@Service
 public class BotHandlerImpl implements BotHandler {
     @Autowired
     private BotService botService;
