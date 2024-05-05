@@ -1,7 +1,9 @@
 package com.skypro.FirstTeamPetShelter.service.bot.Impl;
 
 import com.pengrad.telegrambot.TelegramBot;
+import com.pengrad.telegrambot.model.CallbackQuery;
 import com.pengrad.telegrambot.model.Update;
+import com.pengrad.telegrambot.model.User;
 import com.pengrad.telegrambot.request.SendMessage;
 import com.skypro.FirstTeamPetShelter.model.Adopter;
 import com.skypro.FirstTeamPetShelter.model.UserApp;
@@ -12,8 +14,8 @@ import com.skypro.FirstTeamPetShelter.service.VolunteerService;
 import com.skypro.FirstTeamPetShelter.service.bot.BotMenuService;
 import com.skypro.FirstTeamPetShelter.service.bot.BotService;
 import com.skypro.FirstTeamPetShelter.service.InfoService;
-import com.skypro.FirstTeamPetShelter.service.bot.helper.Menu;
-import com.skypro.FirstTeamPetShelter.service.bot.helper.Role;
+import com.skypro.FirstTeamPetShelter.enums.Menu;
+import com.skypro.FirstTeamPetShelter.enums.Role;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
@@ -54,19 +56,16 @@ public class BotServiceImpl implements BotService {
 
     @Override
     public void sendResponseFromUpdate(TelegramBot telegramBot, Update update, String messageText, Menu menu) {
-        messageText = parseMessageText(update, messageText);
-        SendMessage sendMessage;
-        try {
-            sendMessage = new SendMessage(update.message().chat().id(), messageText);
-            if (menu != null) {
-                sendMessage.replyMarkup(botMenuService.getMenu(menu));
-            }
-        } catch (RuntimeException e) {
-            logger.error(e.getMessage());
-            messageText = infoService.getMessage("Error");
-            sendMessage = new SendMessage(update.message().chat().id(), messageText);
-        }
-        telegramBot.execute(sendMessage);
+        User telegramUser = update.message().from();
+        messageText = parseMessageText(telegramUser, messageText);
+        executeMessage(telegramBot, update.message().chat().id(), messageText, menu);
+    }
+
+    @Override
+    public void sendResponseFromCallback(TelegramBot telegramBot, CallbackQuery callbackQuery, String messageText, Menu menu) {
+        User telegramUser = callbackQuery.from();
+        messageText = parseMessageText(telegramUser, messageText);
+        executeMessage(telegramBot, telegramUser.id(), messageText, menu);
     }
 
     @Override
@@ -111,6 +110,21 @@ public class BotServiceImpl implements BotService {
         sendMessageToRandomVolunteer(telegramBot, update);
     }
 
+    private void executeMessage(TelegramBot telegramBot, Long id, String messageText, Menu menu) {
+        SendMessage sendMessage;
+        try {
+            sendMessage = new SendMessage(id, messageText);
+            if (menu != null) {
+                sendMessage.replyMarkup(botMenuService.getMenu(menu));
+            }
+        } catch (RuntimeException e) {
+            logger.error(e.getMessage());
+            messageText = infoService.getMessage("Error");
+            sendMessage = new SendMessage(id, messageText);
+        }
+        telegramBot.execute(sendMessage);
+    }
+
     private void sendMessageToRandomVolunteer(TelegramBot telegramBot, Update update) {
         List<Volunteer> volunteers = volunteerService.getAllVolunteer().stream().toList();
         long volunteerId = volunteers.stream()
@@ -123,13 +137,13 @@ public class BotServiceImpl implements BotService {
         telegramBot.execute(sendMessage);
     }
 
-    private String parseMessageText(Update update, String messageText) {
+    private String parseMessageText(User telegramUser, String messageText) {
         String result = messageText;
         if (result.contains("{username}")) {
-            result = result.replace("{username}", update.message().from().firstName());
+            result = result.replace("{username}", telegramUser.firstName());
         }
         if (result.contains("{usercontact}")) {
-            result = result.replace("{usercontact}", userService.getUserByTelegramId(update.message().from().id()).getUserPhoneNumber());
+            result = result.replace("{usercontact}", userService.getUserByTelegramId(telegramUser.id()).getUserPhoneNumber());
         }
         return result;
     }

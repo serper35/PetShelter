@@ -1,4 +1,4 @@
-package com.skypro.FirstTeamPetShelter.service.bot.helper;
+package com.skypro.FirstTeamPetShelter.enums;
 
 public enum Menu {
     START,                          // Стартовое меню (список приютов)

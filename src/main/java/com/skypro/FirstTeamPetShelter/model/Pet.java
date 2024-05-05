@@ -1,5 +1,6 @@
 package com.skypro.FirstTeamPetShelter.model;
 
+import com.skypro.FirstTeamPetShelter.enums.PetHealth;
 import jakarta.persistence.*;
 
 import java.util.Objects;

@@ -1,11 +1,12 @@
 package com.skypro.FirstTeamPetShelter.service.bot;
 
 import com.pengrad.telegrambot.TelegramBot;
+import com.pengrad.telegrambot.model.CallbackQuery;
 import com.pengrad.telegrambot.model.Update;
 import com.skypro.FirstTeamPetShelter.model.Adopter;
 import com.skypro.FirstTeamPetShelter.model.UserApp;
-import com.skypro.FirstTeamPetShelter.service.bot.helper.Menu;
-import com.skypro.FirstTeamPetShelter.service.bot.helper.Role;
+import com.skypro.FirstTeamPetShelter.enums.Menu;
+import com.skypro.FirstTeamPetShelter.enums.Role;
 
 import java.util.List;
 
@@ -17,6 +18,7 @@ public interface BotService {
      */
     Role getVisitorRole(Long visitorId);
     void sendResponseFromUpdate(TelegramBot telegramBot, Update update, String messageText, Menu menu);
+    void sendResponseFromCallback(TelegramBot telegramBot, CallbackQuery callbackQuery, String messageText, Menu menu);
     List<UserApp> getUsersCallingVolunteer();
     List<Adopter> getAdoptersCallingVolunteer();
     List<Adopter> getAdoptersReportCheck();
