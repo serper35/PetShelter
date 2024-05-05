@@ -9,4 +9,6 @@ public enum Menu {
     USERS_BECOME_ADOPTIVE,          // Список потенциальных усыновителей
     ADOPTER_SEND_REPORT,            // Отправить отчёт
     USERNAME_PHONE_NUMBER,          // Запрос имени пользователя и номера телефона
+    SHELTER_DOGS,                   // Меню собачьего приюта
+    SHELTER_CATS,                   // Меню кошачьего приюта
 }

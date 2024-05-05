@@ -39,3 +39,6 @@ INSERT INTO info (key_word, message) VALUES ('CallingVolunteer', 'Спасибо
 
 -- changeset v.aliev:8
 INSERT INTO info (key_word, message) VALUES ('UserNameAndPhoneNumber', 'Оставьте свои контактные данные. Имя и/или телефон. Если имя не указать, то будет использовано ваше имя из Telegram.');
+
+-- changeset v.aliev:9
+INSERT INTO info (key_word, message) VALUES ('StartContacted', 'Надеемся вы решили все вопросы и готовы выбрать приют и питомца.');

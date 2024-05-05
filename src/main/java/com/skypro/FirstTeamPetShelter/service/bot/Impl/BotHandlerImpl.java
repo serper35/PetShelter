@@ -4,13 +4,11 @@ import com.pengrad.telegrambot.TelegramBot;
 import com.pengrad.telegrambot.model.CallbackQuery;
 import com.pengrad.telegrambot.model.Update;
 import com.skypro.FirstTeamPetShelter.model.Report;
-import com.skypro.FirstTeamPetShelter.service.AdopterService;
-import com.skypro.FirstTeamPetShelter.service.InfoService;
-import com.skypro.FirstTeamPetShelter.service.ReportService;
-import com.skypro.FirstTeamPetShelter.service.UserService;
+import com.skypro.FirstTeamPetShelter.model.Shelter;
+import com.skypro.FirstTeamPetShelter.service.*;
 import com.skypro.FirstTeamPetShelter.service.bot.BotHandler;
 import com.skypro.FirstTeamPetShelter.service.bot.BotService;
-import com.skypro.FirstTeamPetShelter.service.bot.helper.Menu;
+import com.skypro.FirstTeamPetShelter.enums.Menu;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -34,13 +32,16 @@ public class BotHandlerImpl implements BotHandler {
     @Autowired
     private ReportService reportService;
 
+    @Autowired
+    private ShelterService shelterService;
+
     @Override
     public void updateHandle(TelegramBot telegramBot, Update update) {
         if (update.message().text().equals("/start")) {
             // проверка пользователя - кто это - новый, юзер, усыновитель или волонтер
             switch (botService.getVisitorRole(update.message().from().id())) {
                 case NEWBIE -> {
-                    sendMessage("Start", telegramBot, update, Menu.START);
+                    sendUpdateMessage("Start", telegramBot, update, Menu.START);
                 }
                 case USER -> {
                     userUpdateHandle(telegramBot, update);
@@ -54,56 +55,72 @@ public class BotHandlerImpl implements BotHandler {
             }
         }
         if (update.message().text().equals("/info")) {
-            sendMessage("BotInformation", telegramBot, update, null);
+            sendUpdateMessage("BotInformation", telegramBot, update, null);
         }
         if (update.message().text().equals("/call_volunteer")) {
-            sendMessage("CallingVolunteer", telegramBot, update, null);
+            sendUpdateMessage("CallingVolunteer", telegramBot, update, null);
             botService.callVolunteer(telegramBot, update);
         }
     }
 
     @Override
     public void callbackHandle(TelegramBot telegramBot, CallbackQuery callbackQuery) {
-
+        // если да, то в бд пишем да и выдаем Готовы выбрать приют и животное? если нет, то Свяжемся позже и может вы готовы выбрать и список приютов
+        if (callbackQuery.data().equals("NotContacted")) {
+            sendCallbackMessage("StartNotContacted", telegramBot, callbackQuery, Menu.START);
+        } else if (callbackQuery.data().equals("Contacted")) {
+            userService.editUser(userService.getUserByTelegramId(callbackQuery.from().id())).setContacted(true);
+            sendCallbackMessage("StartContacted", telegramBot, callbackQuery, Menu.START);
+        } else if (callbackQuery.data().contains("Shelter_")) {
+            long shelterId = Long.parseLong(callbackQuery.data().replace("Shelter_", ""));
+            Shelter shelter = shelterService.getShelter(shelterId);
+            Menu menu;
+            if (shelter.getShelterType().equalsIgnoreCase("dogs")) {
+                menu = Menu.SHELTER_DOGS;
+            } else if (shelter.getShelterType().equalsIgnoreCase("cat")) {
+                menu = Menu.SHELTER_CATS;
+            }
+            //sendCallbackMessage("");
+        }
     }
 
     private void volunteerUpdateHandle(TelegramBot telegramBot, Update update) {
         // Приветствие волонтера
-        sendMessage("HelloVolunteer", telegramBot, update, null);
+        sendUpdateMessage("HelloVolunteer", telegramBot, update, null);
 
         // Вывод списка пользователей, зовущих волонтера, если таковые есть
         if (botService.getUsersCallingVolunteer() != null) {
-            sendMessage("CallingUsers", telegramBot, update, Menu.CALLING_USERS);
+            sendUpdateMessage("CallingUsers", telegramBot, update, Menu.CALLING_USERS);
         } else {
-            sendMessage("NotCallingUsers", telegramBot, update, null);
+            sendUpdateMessage("NotCallingUsers", telegramBot, update, null);
         }
 
         // Вывод списка усыновителей, зовущих волонтера, если таковые есть
         if (botService.getAdoptersCallingVolunteer() != null) {
-            sendMessage("CallingAdopters", telegramBot, update, Menu.CALLING_ADOPTERS);
+            sendUpdateMessage("CallingAdopters", telegramBot, update, Menu.CALLING_ADOPTERS);
         } else {
-            sendMessage("NotCallingAdopters", telegramBot, update, null);
+            sendUpdateMessage("NotCallingAdopters", telegramBot, update, null);
         }
 
         // Вывод списка усыновителей, чьи отчёты нужно проверить сегодня, если таковые есть
         if (botService.getAdoptersReportCheck() != null) {
-            sendMessage("AdoptersReportCheck", telegramBot, update, Menu.CHECK_REPORTS);
+            sendUpdateMessage("AdoptersReportCheck", telegramBot, update, Menu.CHECK_REPORTS);
         } else {
-            sendMessage("NotAdoptersReportCheck", telegramBot, update, null);
+            sendUpdateMessage("NotAdoptersReportCheck", telegramBot, update, null);
         }
 
         // Вывод списка пользователей, желающих стать усыновителями, если таковые есть
         if (botService.getUsersBecomeAdoptive() != null) {
-            sendMessage("UsersBecomeAdoptive", telegramBot, update, Menu.USERS_BECOME_ADOPTIVE);
+            sendUpdateMessage("UsersBecomeAdoptive", telegramBot, update, Menu.USERS_BECOME_ADOPTIVE);
         } else {
-            sendMessage("NotUsersBecomeAdoptive", telegramBot, update, null);
+            sendUpdateMessage("NotUsersBecomeAdoptive", telegramBot, update, null);
         }
     }
 
     private void adopterUpdateHandle(TelegramBot telegramBot, Update update) {
         // если усыновитель, то проверка когда был отчет, сколько времени. если нужен отчет, то просим, если рано то рано говорим, и выдаем в обоих случаях меню усыновителя
         // если усыновитель и пришла дата окончания проверки и нет продления, а также нарушений, то поздравление иначе отказ и возврат животного
-        sendMessage("HelloAdopter", telegramBot, update, null);
+        sendUpdateMessage("HelloAdopter", telegramBot, update, null);
         String messageText;
         long adopterId = adopterService.getAdopterByTelegramId(update.message().from().id()).getId();
         // Если список отчетов усыновителя не пуст
@@ -145,14 +162,19 @@ public class BotHandlerImpl implements BotHandler {
     private void userUpdateHandle(TelegramBot telegramBot, Update update) {
         // если юзер, то приветствие и проверка в бд связывались ли с ним. если в бд не связывались, то вопрос к юзеру связывались?
         if (userService.getUserByTelegramId(update.message().from().id()).isContacted()) {
-            sendMessage("Start", telegramBot, update, Menu.START);
+            sendUpdateMessage("Start", telegramBot, update, Menu.START);
         } else {
-            sendMessage("StartNotContacted", telegramBot, update, Menu.ANSWER_CONTACTED);
+            sendUpdateMessage("StartNotContacted", telegramBot, update, Menu.ANSWER_CONTACTED);
         }
     }
 
-    private void sendMessage(String key_word, TelegramBot telegramBot, Update update, Menu menu) {
+    private void sendUpdateMessage(String key_word, TelegramBot telegramBot, Update update, Menu menu) {
         String messageText = infoService.getMessage(key_word);
         botService.sendResponseFromUpdate(telegramBot, update, messageText, menu);
+    }
+
+    private void sendCallbackMessage(String key_word, TelegramBot telegramBot, CallbackQuery callbackQuery, Menu menu) {
+        String messageText = infoService.getMessage(key_word);
+        botService.sendResponseFromCallback(telegramBot, callbackQuery, messageText, menu);
     }
 }
