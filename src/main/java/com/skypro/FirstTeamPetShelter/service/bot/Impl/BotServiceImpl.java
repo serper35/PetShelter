@@ -129,7 +129,7 @@ public class BotServiceImpl implements BotService {
             result = result.replace("{username}", update.message().from().firstName());
         }
         if (result.contains("{usercontact}")) {
-            result = result.replace("{usercontact}", userService.findByUserTelegramId(update.message().from().id()).getUserPhoneNumber());
+            result = result.replace("{usercontact}", userService.getUserByTelegramId(update.message().from().id()).getUserPhoneNumber());
         }
         return result;
     }
