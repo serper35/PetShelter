@@ -6,21 +6,22 @@ import com.pengrad.telegrambot.model.Update;
 import com.pengrad.telegrambot.model.User;
 import com.pengrad.telegrambot.request.SendMessage;
 import com.skypro.FirstTeamPetShelter.model.Adopter;
+import com.skypro.FirstTeamPetShelter.model.Report;
 import com.skypro.FirstTeamPetShelter.model.UserApp;
 import com.skypro.FirstTeamPetShelter.model.Volunteer;
-import com.skypro.FirstTeamPetShelter.service.AdopterService;
-import com.skypro.FirstTeamPetShelter.service.UserService;
-import com.skypro.FirstTeamPetShelter.service.VolunteerService;
+import com.skypro.FirstTeamPetShelter.service.*;
 import com.skypro.FirstTeamPetShelter.service.bot.BotMenuService;
 import com.skypro.FirstTeamPetShelter.service.bot.BotService;
-import com.skypro.FirstTeamPetShelter.service.InfoService;
 import com.skypro.FirstTeamPetShelter.enums.Menu;
 import com.skypro.FirstTeamPetShelter.enums.Role;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 public class BotServiceImpl implements BotService {
@@ -29,14 +30,15 @@ public class BotServiceImpl implements BotService {
     private final UserService userService;
     private final AdopterService adopterService;
     private final VolunteerService volunteerService;
-
+    private final ReportService reportService;
     private final BotMenuService botMenuService;
     private final InfoService infoService;
 
-    public BotServiceImpl(UserService userService, AdopterService adopterService, VolunteerService volunteerService, BotMenuService botMenuService, InfoService infoService) {
+    public BotServiceImpl(UserService userService, AdopterService adopterService, VolunteerService volunteerService, ReportService reportService, BotMenuService botMenuService, InfoService infoService) {
         this.userService = userService;
         this.adopterService = adopterService;
         this.volunteerService = volunteerService;
+        this.reportService = reportService;
         this.botMenuService = botMenuService;
         this.infoService = infoService;
     }
@@ -70,22 +72,50 @@ public class BotServiceImpl implements BotService {
 
     @Override
     public List<UserApp> getUsersCallingVolunteer() {
-        return List.of();
+        List<UserApp> users = userService.getAllUser().stream().toList();
+        List<UserApp> result = new ArrayList<>();
+        for (UserApp userApp : users) {
+            if(!userApp.isContacted()) {
+                result.add(userApp);
+            }
+        }
+        return Collections.unmodifiableList(result);
     }
 
     @Override
     public List<Adopter> getAdoptersCallingVolunteer() {
-        return List.of();
+        List<Adopter> adopters = adopterService.getAllAdopters().stream().toList();
+        List<Adopter> result = new ArrayList<>();
+        for (Adopter adopter : adopters) {
+            if (!adopter.isContacted()) {
+                result.add(adopter);
+            }
+        }
+        return Collections.unmodifiableList(result);
     }
 
     @Override
-    public List<Adopter> getAdoptersReportCheck() {
-        return List.of();
+    public List<Report> getAdoptersReportCheck() {
+        List<Report> reports = reportService.getAllReports().stream().toList();
+        List<Report> result = new ArrayList<>();
+        for (Report report : reports) {
+            if (!report.isReviewed()) {
+                result.add(report);
+            }
+        }
+        return Collections.unmodifiableList(result);
     }
 
     @Override
     public List<UserApp> getUsersBecomeAdoptive() {
-        return List.of();
+        List<UserApp> users = userService.getAllUser().stream().toList();
+        List<UserApp> result = new ArrayList<>();
+        for (UserApp userApp : users) {
+            if(userApp.isBecomeAdoptive()) {
+                result.add(userApp);
+            }
+        }
+        return Collections.unmodifiableList(result);
     }
 
     @Override

@@ -4,6 +4,7 @@ import com.pengrad.telegrambot.TelegramBot;
 import com.pengrad.telegrambot.model.CallbackQuery;
 import com.pengrad.telegrambot.model.Update;
 import com.skypro.FirstTeamPetShelter.model.Adopter;
+import com.skypro.FirstTeamPetShelter.model.Report;
 import com.skypro.FirstTeamPetShelter.model.UserApp;
 import com.skypro.FirstTeamPetShelter.enums.Menu;
 import com.skypro.FirstTeamPetShelter.enums.Role;
@@ -21,7 +22,7 @@ public interface BotService {
     void sendResponseFromCallback(TelegramBot telegramBot, CallbackQuery callbackQuery, String messageText, Menu menu);
     List<UserApp> getUsersCallingVolunteer();
     List<Adopter> getAdoptersCallingVolunteer();
-    List<Adopter> getAdoptersReportCheck();
+    List<Report> getAdoptersReportCheck();
     List<UserApp> getUsersBecomeAdoptive();
 
     void callVolunteer(TelegramBot telegramBot, Update update);

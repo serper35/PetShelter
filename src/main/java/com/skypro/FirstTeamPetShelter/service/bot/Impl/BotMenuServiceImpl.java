@@ -6,11 +6,11 @@ import com.skypro.FirstTeamPetShelter.model.Report;
 import com.skypro.FirstTeamPetShelter.model.Shelter;
 import com.skypro.FirstTeamPetShelter.model.UserApp;
 import com.skypro.FirstTeamPetShelter.service.AdopterService;
-import com.skypro.FirstTeamPetShelter.service.ReportService;
 import com.skypro.FirstTeamPetShelter.service.ShelterService;
 import com.skypro.FirstTeamPetShelter.service.UserService;
 import com.skypro.FirstTeamPetShelter.service.bot.BotMenuService;
 import com.skypro.FirstTeamPetShelter.enums.Menu;
+import com.skypro.FirstTeamPetShelter.service.bot.BotService;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -18,15 +18,11 @@ import java.util.List;
 @Service
 public class BotMenuServiceImpl implements BotMenuService {
     private final ShelterService shelterService;
-    private final UserService userService;
-    private final AdopterService adopterService;
-    private final ReportService reportService;
+    private final BotService botService;
 
-    public BotMenuServiceImpl(ShelterService shelterService, UserService userService, AdopterService adopterService, ReportService reportService) {
+    public BotMenuServiceImpl(ShelterService shelterService, BotService botService) {
         this.shelterService = shelterService;
-        this.userService = userService;
-        this.adopterService = adopterService;
-        this.reportService = reportService;
+        this.botService = botService;
     }
 
     @Override
@@ -73,70 +69,47 @@ public class BotMenuServiceImpl implements BotMenuService {
     }
 
     private InlineKeyboardMarkup getCheckReportsMenu() {
-        List<Report> reports = reportService.getAllReports().stream().toList();
-        InlineKeyboardButton[] inlineKeyboardButtons = new InlineKeyboardButton[reports.size()];
-        for (int i = 0; i < inlineKeyboardButtons.length; i++) {
-            if (reports.get(i).isReviewed()) {
-                inlineKeyboardButtons[i] = new InlineKeyboardButton(
-                        "Отчёт усыновителя " + reports.get(i).getAdopter().getAdopterName())
-                        .callbackData("Report_" + reports.get(i).getId()
-                        );
-            }
-        }
+        List<Report> reports = botService.getAdoptersReportCheck();
+        InlineKeyboardButton[] inlineKeyboardButtons = reports.stream().map(report -> new InlineKeyboardButton(
+                "Отчёт усыновителя " + report.getAdopter().getAdopterName())
+                .callbackData("Report_" + report.getId()
+                )).toArray(InlineKeyboardButton[]::new);
         return new InlineKeyboardMarkup(inlineKeyboardButtons);
     }
 
     private InlineKeyboardMarkup getUsersBecomeAdoptiveMenu() {
-        List<UserApp> users = userService.getAllUser().stream().toList();
-        InlineKeyboardButton[] inlineKeyboardButtons = new InlineKeyboardButton[users.size()];
-        for (int i = 0; i < inlineKeyboardButtons.length; i++) {
-            if (users.get(i).isBecomeAdoptive()) {
-                inlineKeyboardButtons[i] = new InlineKeyboardButton(
-                        users.get(i).getUserName() + " Телефон: " + users.get(i).getUserPhoneNumber())
-                        .callbackData("UserBecomeAdoptive_" + users.get(i).getUserTelegramId()
-                        );
-            }
-        }
+        List<UserApp> users = botService.getUsersBecomeAdoptive();
+        InlineKeyboardButton[] inlineKeyboardButtons = users.stream().map(userApp -> new InlineKeyboardButton(
+                        userApp.getUserName() + " Телефон: " + userApp.getUserPhoneNumber())
+                        .callbackData("UserBecomeAdoptive_" + userApp.getUserTelegramId()
+                        )).toArray(InlineKeyboardButton[]::new);
         return new InlineKeyboardMarkup(inlineKeyboardButtons);
     }
 
     private InlineKeyboardMarkup getCallingUsersMenu() {
-        List<UserApp> users = userService.getAllUser().stream().toList();
-        InlineKeyboardButton[] inlineKeyboardButtons = new InlineKeyboardButton[users.size()];
-        for (int i = 0; i < inlineKeyboardButtons.length; i++) {
-            if (!users.get(i).isContacted()) {
-                inlineKeyboardButtons[i] = new InlineKeyboardButton(
-                        users.get(i).getUserName() + " Телефон: " + users.get(i).getUserPhoneNumber())
-                        .callbackData("UsersCall_" + users.get(i).getUserTelegramId()
-                        );
-            }
-        }
+        List<UserApp> users = botService.getUsersCallingVolunteer();
+        InlineKeyboardButton[] inlineKeyboardButtons = users.stream().map(userApp -> new InlineKeyboardButton(
+                userApp.getUserName() + " Телефон: " + userApp.getUserPhoneNumber())
+                .callbackData("UsersCall_" + userApp.getUserTelegramId()
+                )).toArray(InlineKeyboardButton[]::new);
         return new InlineKeyboardMarkup(inlineKeyboardButtons);
     }
 
     private InlineKeyboardMarkup getCallingAdoptersMenu() {
-        List<Adopter> adopters = adopterService.getAllAdopters().stream().toList();
-        InlineKeyboardButton[] inlineKeyboardButtons = new InlineKeyboardButton[adopters.size()];
-        for (int i = 0; i < inlineKeyboardButtons.length; i++) {
-            if (!adopters.get(i).isContacted()) {
-                inlineKeyboardButtons[i] = new InlineKeyboardButton(
-                        adopters.get(i).getAdopterName() + " Телефон: " + adopters.get(i).getAdopterPhoneNumber())
-                        .callbackData("AdoptersCall_" + adopters.get(i).getAdopterTelegramId()
-                        );
-            }
-        }
+        List<Adopter> adopters = botService.getAdoptersCallingVolunteer();
+        InlineKeyboardButton[] inlineKeyboardButtons = adopters.stream().map(adopter -> new InlineKeyboardButton(
+                        adopter.getAdopterName() + " Телефон: " + adopter.getAdopterPhoneNumber())
+                        .callbackData("AdoptersCall_" + adopter.getAdopterTelegramId()
+                        )).toArray(InlineKeyboardButton[]::new);
         return new InlineKeyboardMarkup(inlineKeyboardButtons);
     }
 
     private InlineKeyboardMarkup getStartMenu() {
         List<Shelter> shelters = shelterService.getAllShelters().stream().toList();
-        InlineKeyboardButton[] inlineKeyboardButtons = new InlineKeyboardButton[shelters.size()];
-        for (int i = 0; i < inlineKeyboardButtons.length; i++) {
-            inlineKeyboardButtons[i] = new InlineKeyboardButton(
-                    shelters.get(i).getShelterName())
-                    .callbackData("Shelter_" + shelters.get(i).getId()
-                    );
-        }
+        InlineKeyboardButton[] inlineKeyboardButtons = shelters.stream().map(shelter -> new InlineKeyboardButton(
+                    shelter.getShelterName())
+                    .callbackData("Shelter_" + shelter.getId()
+                    )).toArray(InlineKeyboardButton[]::new);
         return new InlineKeyboardMarkup(inlineKeyboardButtons);
     }
 
