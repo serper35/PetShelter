@@ -21,4 +21,6 @@ public interface BotService {
     List<Adopter> getAdoptersCallingVolunteer();
     List<Adopter> getAdoptersReportCheck();
     List<UserApp> getUsersBecomeAdoptive();
+
+    void callVolunteer(TelegramBot telegramBot, Update update);
 }

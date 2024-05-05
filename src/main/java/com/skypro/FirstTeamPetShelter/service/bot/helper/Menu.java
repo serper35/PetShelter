@@ -7,5 +7,6 @@ public enum Menu {
     CALLING_ADOPTERS,               // Список усыновителей, звавших волонтёра
     CHECK_REPORTS,                  // Отчеты, которые ещё не проверялись
     USERS_BECOME_ADOPTIVE,          // Список потенциальных усыновителей
-    ADOPTER_SEND_REPORT             // Отправить отчёт
+    ADOPTER_SEND_REPORT,            // Отправить отчёт
+    USERNAME_PHONE_NUMBER,          // Запрос имени пользователя и номера телефона
 }

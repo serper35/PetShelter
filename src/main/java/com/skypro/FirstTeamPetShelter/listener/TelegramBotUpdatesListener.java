@@ -5,15 +5,22 @@ import com.pengrad.telegrambot.UpdatesListener;
 import com.pengrad.telegrambot.model.*;
 import com.pengrad.telegrambot.request.SendMessage;
 import com.pengrad.telegrambot.response.SendResponse;
+import com.skypro.FirstTeamPetShelter.model.Report;
 import com.skypro.FirstTeamPetShelter.service.*;
-import com.skypro.FirstTeamPetShelter.service.helper.Menu;
+import com.skypro.FirstTeamPetShelter.service.bot.BotMenuService;
+import com.skypro.FirstTeamPetShelter.service.bot.BotService;
+import com.skypro.FirstTeamPetShelter.service.bot.helper.Menu;
 import jakarta.annotation.PostConstruct;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.util.Arrays;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 public class TelegramBotUpdatesListener implements UpdatesListener {
@@ -39,6 +46,12 @@ public class TelegramBotUpdatesListener implements UpdatesListener {
 
     @Autowired
     private ShelterService shelterService;
+
+    @Autowired
+    private ReportService reportService;
+
+    @Autowired
+    private AdopterService adopterService;
 
     @PostConstruct
     public void init() {
@@ -72,7 +85,43 @@ public class TelegramBotUpdatesListener implements UpdatesListener {
                         case ADOPTER -> {
                             // если усыновитель, то проверка когда был отчет, сколько времени. если нужен отчет, то просим, если рано то рано говорим, и выдаем в обоих случаях меню усыновителя
                             // если усыновитель и пришла дата окончания проверки и нет продления, а также нарушений, то поздравление иначе отказ и возврат животного
-                            // ToDo поправить БД, внести изменения в liquibase, а затем вернуться сюда
+                            String messageText = infoService.getMessage("HelloAdopter");
+                            botService.sendResponseFromUpdate(telegramBot, update, messageText, null);
+                            long adopterId = adopterService.getAdopterByTelegramId(update.message().from().id()).getId();
+                            // Если список отчетов усыновителя не пуст
+                            if (reportService.getReportsByAdopter(adopterId) != null) {
+                                if (reportService.getReportsByAdopterAndReviewed(adopterId, false) != null) {
+                                    String localDateTimes = reportService.getReportsByAdopterAndReviewed(adopterId, false)
+                                            .stream()
+                                            .map(Report::getReportDate)
+                                            .toList()
+                                            .toString();
+
+                                    messageText = infoService.getMessage("ReportIsReviewedFalse");
+                                    messageText += " Непроверенные отчеты за даты: " + localDateTimes;
+                                    botService.sendResponseFromUpdate(telegramBot, update, messageText, null);
+                                } else {
+                                    if (reportService.getReportsByAdopterAndReviewed(adopterId, true) != null) {
+                                        LocalDateTime reportDateTime = reportService.getReportsByAdopterAndReviewed(adopterId, true)
+                                                .stream()
+                                                .map(Report::getReportDate)
+                                                .max(LocalDateTime::compareTo)
+                                                .orElse(null);
+                                        if (reportDateTime != null
+                                                && reportDateTime.getDayOfMonth() == LocalDate.now().getDayOfMonth()
+                                                && reportDateTime.isBefore(LocalDate.now().atTime(21, 1))) {
+                                            messageText = infoService.getMessage("ReportsIsReviewedTrue");
+                                            botService.sendResponseFromUpdate(telegramBot, update, messageText, null);
+                                        }
+                                    } else {
+                                        messageText = infoService.getMessage("ReportNotSend");
+                                        botService.sendResponseFromUpdate(telegramBot, update, messageText, Menu.ADOPTER_SEND_REPORT);
+                                    }
+                                }
+                            } else {
+                                messageText = infoService.getMessage("ReportNotSend");
+                                botService.sendResponseFromUpdate(telegramBot, update, messageText, Menu.ADOPTER_SEND_REPORT);
+                            }
                         }
                         case VOLUNTEER -> {
                             // Приветствие волонтера
@@ -117,12 +166,14 @@ public class TelegramBotUpdatesListener implements UpdatesListener {
                         }
                     }
                 }
-                if (update.message().text().contains("/shelter_")) {
-                    shelter_id = Long.parseLong(update.message().text().replace("/shelter_", ""));
-                    String messageText = "Здравствуйте! Спасибо, что выбрали наш приют" + shelterService.getShelter(shelter_id).getShelterName();
-                    SendMessage sendMessage = new SendMessage(update.message().chat().id(), messageText);
-                    sendMessage.replyMarkup(botMenuService.getShelterMenu());
-                    SendResponse sendResponse = telegramBot.execute(sendMessage);
+                if (update.message().text().equals("/info")) {
+                    String messageText = infoService.getMessage("BotInformation");
+                    botService.sendResponseFromUpdate(telegramBot, update, messageText, null);
+                }
+                if (update.message().text().equals("/call-volunteer")) {
+                    String messageText = infoService.getMessage("CallingVolunteer");
+                    botService.callVolunteer(telegramBot, update);
+                    botService.sendResponseFromUpdate(telegramBot, update, messageText, null);
                 }
             }
             if (callbackQuery != null) {
