@@ -17,7 +17,7 @@ public class TelegramBotConfiguration {
         TelegramBot bot = new TelegramBot(token);
         BotCommand[] commands = {
                 new BotCommand("/start", "Начало работы с ботом"),
-                new BotCommand("/call-volunteer", "Позвать волонтёра"),
+                new BotCommand("/call_volunteer", "Позвать волонтёра"),
                 new BotCommand("/info", "Информация о боте")
         };
         bot.execute(new SetMyCommands(commands));

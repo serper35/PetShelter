@@ -45,7 +45,7 @@ public class BotServiceImpl implements BotService {
             return Role.USER;
         } else if (adopterService.getAdopterByTelegramId(visitorId) != null) {
             return Role.ADOPTER;
-        } else if (volunteerService.getVolunteerById(visitorId) != null) {
+        } else if (volunteerService.getVolunteerByTelegramId(visitorId) != null) {
             return Role.VOLUNTEER;
         } else {
             return Role.NEWBIE;

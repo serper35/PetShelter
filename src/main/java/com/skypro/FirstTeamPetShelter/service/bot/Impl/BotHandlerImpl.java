@@ -56,7 +56,7 @@ public class BotHandlerImpl implements BotHandler {
         if (update.message().text().equals("/info")) {
             sendMessage("BotInformation", telegramBot, update, null);
         }
-        if (update.message().text().equals("/call-volunteer")) {
+        if (update.message().text().equals("/call_volunteer")) {
             sendMessage("CallingVolunteer", telegramBot, update, null);
             botService.callVolunteer(telegramBot, update);
         }
