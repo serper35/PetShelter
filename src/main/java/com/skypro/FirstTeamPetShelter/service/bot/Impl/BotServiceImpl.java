@@ -30,15 +30,13 @@ public class BotServiceImpl implements BotService {
     private final UserService userService;
     private final AdopterService adopterService;
     private final VolunteerService volunteerService;
-    private final ReportService reportService;
     private final BotMenuService botMenuService;
     private final InfoService infoService;
 
-    public BotServiceImpl(UserService userService, AdopterService adopterService, VolunteerService volunteerService, ReportService reportService, BotMenuService botMenuService, InfoService infoService) {
+    public BotServiceImpl(UserService userService, AdopterService adopterService, VolunteerService volunteerService, BotMenuService botMenuService, InfoService infoService) {
         this.userService = userService;
         this.adopterService = adopterService;
         this.volunteerService = volunteerService;
-        this.reportService = reportService;
         this.botMenuService = botMenuService;
         this.infoService = infoService;
     }
@@ -68,54 +66,6 @@ public class BotServiceImpl implements BotService {
         User telegramUser = callbackQuery.from();
         messageText = parseMessageText(telegramUser, messageText);
         executeMessage(telegramBot, telegramUser.id(), messageText, menu);
-    }
-
-    @Override
-    public List<UserApp> getUsersCallingVolunteer() {
-        List<UserApp> users = userService.getAllUser().stream().toList();
-        List<UserApp> result = new ArrayList<>();
-        for (UserApp userApp : users) {
-            if(!userApp.isContacted()) {
-                result.add(userApp);
-            }
-        }
-        return Collections.unmodifiableList(result);
-    }
-
-    @Override
-    public List<Adopter> getAdoptersCallingVolunteer() {
-        List<Adopter> adopters = adopterService.getAllAdopters().stream().toList();
-        List<Adopter> result = new ArrayList<>();
-        for (Adopter adopter : adopters) {
-            if (!adopter.isContacted()) {
-                result.add(adopter);
-            }
-        }
-        return Collections.unmodifiableList(result);
-    }
-
-    @Override
-    public List<Report> getAdoptersReportCheck() {
-        List<Report> reports = reportService.getAllReports().stream().toList();
-        List<Report> result = new ArrayList<>();
-        for (Report report : reports) {
-            if (!report.isReviewed()) {
-                result.add(report);
-            }
-        }
-        return Collections.unmodifiableList(result);
-    }
-
-    @Override
-    public List<UserApp> getUsersBecomeAdoptive() {
-        List<UserApp> users = userService.getAllUser().stream().toList();
-        List<UserApp> result = new ArrayList<>();
-        for (UserApp userApp : users) {
-            if(userApp.isBecomeAdoptive()) {
-                result.add(userApp);
-            }
-        }
-        return Collections.unmodifiableList(result);
     }
 
     @Override

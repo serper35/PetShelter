@@ -20,10 +20,5 @@ public interface BotService {
     Role getVisitorRole(Long visitorId);
     void sendResponseFromUpdate(TelegramBot telegramBot, Update update, String messageText, Menu menu);
     void sendResponseFromCallback(TelegramBot telegramBot, CallbackQuery callbackQuery, String messageText, Menu menu);
-    List<UserApp> getUsersCallingVolunteer();
-    List<Adopter> getAdoptersCallingVolunteer();
-    List<Report> getAdoptersReportCheck();
-    List<UserApp> getUsersBecomeAdoptive();
-
     void callVolunteer(TelegramBot telegramBot, Update update);
 }

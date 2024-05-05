@@ -9,6 +9,7 @@ import com.skypro.FirstTeamPetShelter.service.*;
 import com.skypro.FirstTeamPetShelter.service.bot.BotHandler;
 import com.skypro.FirstTeamPetShelter.service.bot.BotService;
 import com.skypro.FirstTeamPetShelter.enums.Menu;
+import com.skypro.FirstTeamPetShelter.service.bot.helper.BotHelper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -34,6 +35,9 @@ public class BotHandlerImpl implements BotHandler {
 
     @Autowired
     private ShelterService shelterService;
+
+    @Autowired
+    private BotHelper botHelper;
 
     @Override
     public void updateHandle(TelegramBot telegramBot, Update update) {
@@ -89,28 +93,28 @@ public class BotHandlerImpl implements BotHandler {
         sendUpdateMessage("HelloVolunteer", telegramBot, update, null);
 
         // Вывод списка пользователей, зовущих волонтера, если таковые есть
-        if (botService.getUsersCallingVolunteer() != null) {
+        if (botHelper.getUsersCallingVolunteer() != null) {
             sendUpdateMessage("CallingUsers", telegramBot, update, Menu.CALLING_USERS);
         } else {
             sendUpdateMessage("NotCallingUsers", telegramBot, update, null);
         }
 
         // Вывод списка усыновителей, зовущих волонтера, если таковые есть
-        if (botService.getAdoptersCallingVolunteer() != null) {
+        if (botHelper.getAdoptersCallingVolunteer() != null) {
             sendUpdateMessage("CallingAdopters", telegramBot, update, Menu.CALLING_ADOPTERS);
         } else {
             sendUpdateMessage("NotCallingAdopters", telegramBot, update, null);
         }
 
         // Вывод списка усыновителей, чьи отчёты нужно проверить сегодня, если таковые есть
-        if (botService.getAdoptersReportCheck() != null) {
+        if (botHelper.getAdoptersReportCheck() != null) {
             sendUpdateMessage("AdoptersReportCheck", telegramBot, update, Menu.CHECK_REPORTS);
         } else {
             sendUpdateMessage("NotAdoptersReportCheck", telegramBot, update, null);
         }
 
         // Вывод списка пользователей, желающих стать усыновителями, если таковые есть
-        if (botService.getUsersBecomeAdoptive() != null) {
+        if (botHelper.getUsersBecomeAdoptive() != null) {
             sendUpdateMessage("UsersBecomeAdoptive", telegramBot, update, Menu.USERS_BECOME_ADOPTIVE);
         } else {
             sendUpdateMessage("NotUsersBecomeAdoptive", telegramBot, update, null);

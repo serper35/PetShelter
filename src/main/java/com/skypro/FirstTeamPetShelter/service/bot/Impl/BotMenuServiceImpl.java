@@ -11,6 +11,7 @@ import com.skypro.FirstTeamPetShelter.service.UserService;
 import com.skypro.FirstTeamPetShelter.service.bot.BotMenuService;
 import com.skypro.FirstTeamPetShelter.enums.Menu;
 import com.skypro.FirstTeamPetShelter.service.bot.BotService;
+import com.skypro.FirstTeamPetShelter.service.bot.helper.BotHelper;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -18,11 +19,11 @@ import java.util.List;
 @Service
 public class BotMenuServiceImpl implements BotMenuService {
     private final ShelterService shelterService;
-    private final BotService botService;
+    private final BotHelper botHelper;
 
-    public BotMenuServiceImpl(ShelterService shelterService, BotService botService) {
+    public BotMenuServiceImpl(ShelterService shelterService, BotHelper botHelper) {
         this.shelterService = shelterService;
-        this.botService = botService;
+        this.botHelper = botHelper;
     }
 
     @Override
@@ -69,7 +70,7 @@ public class BotMenuServiceImpl implements BotMenuService {
     }
 
     private InlineKeyboardMarkup getCheckReportsMenu() {
-        List<Report> reports = botService.getAdoptersReportCheck();
+        List<Report> reports = botHelper.getAdoptersReportCheck();
         InlineKeyboardButton[] inlineKeyboardButtons = reports.stream().map(report -> new InlineKeyboardButton(
                 "Отчёт усыновителя " + report.getAdopter().getAdopterName())
                 .callbackData("Report_" + report.getId()
@@ -78,7 +79,7 @@ public class BotMenuServiceImpl implements BotMenuService {
     }
 
     private InlineKeyboardMarkup getUsersBecomeAdoptiveMenu() {
-        List<UserApp> users = botService.getUsersBecomeAdoptive();
+        List<UserApp> users = botHelper.getUsersBecomeAdoptive();
         InlineKeyboardButton[] inlineKeyboardButtons = users.stream().map(userApp -> new InlineKeyboardButton(
                         userApp.getUserName() + " Телефон: " + userApp.getUserPhoneNumber())
                         .callbackData("UserBecomeAdoptive_" + userApp.getUserTelegramId()
@@ -87,7 +88,7 @@ public class BotMenuServiceImpl implements BotMenuService {
     }
 
     private InlineKeyboardMarkup getCallingUsersMenu() {
-        List<UserApp> users = botService.getUsersCallingVolunteer();
+        List<UserApp> users = botHelper.getUsersCallingVolunteer();
         InlineKeyboardButton[] inlineKeyboardButtons = users.stream().map(userApp -> new InlineKeyboardButton(
                 userApp.getUserName() + " Телефон: " + userApp.getUserPhoneNumber())
                 .callbackData("UsersCall_" + userApp.getUserTelegramId()
@@ -96,7 +97,7 @@ public class BotMenuServiceImpl implements BotMenuService {
     }
 
     private InlineKeyboardMarkup getCallingAdoptersMenu() {
-        List<Adopter> adopters = botService.getAdoptersCallingVolunteer();
+        List<Adopter> adopters = botHelper.getAdoptersCallingVolunteer();
         InlineKeyboardButton[] inlineKeyboardButtons = adopters.stream().map(adopter -> new InlineKeyboardButton(
                         adopter.getAdopterName() + " Телефон: " + adopter.getAdopterPhoneNumber())
                         .callbackData("AdoptersCall_" + adopter.getAdopterTelegramId()
