@@ -15,6 +15,7 @@ public class Adopter {
     private Long adopterTelegramId;
     @OneToMany(mappedBy = "adopter")
     private Collection<Report> adopterReports;
+    private boolean isContacted;
 
     public Adopter() {
     }
@@ -32,12 +33,13 @@ public class Adopter {
         this.adopterReports = adopterReports;
     }
 
-    public Adopter(Long id, String adopterName, String adopterPhoneNumber, Long adopterTelegramId, Collection<Report> adopterReports) {
+    public Adopter(Long id, String adopterName, String adopterPhoneNumber, Long adopterTelegramId, Collection<Report> adopterReports, boolean isContacted) {
         this.id = id;
         this.adopterName = adopterName;
         this.adopterPhoneNumber = adopterPhoneNumber;
         this.adopterTelegramId = adopterTelegramId;
         this.adopterReports = adopterReports;
+        this.isContacted = isContacted;
     }
 
     public Long getId() {
@@ -80,17 +82,25 @@ public class Adopter {
         this.adopterReports = adopterReports;
     }
 
+    public boolean isContacted() {
+        return isContacted;
+    }
+
+    public void setContacted(boolean contacted) {
+        isContacted = contacted;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         Adopter adopter = (Adopter) o;
-        return Objects.equals(id, adopter.id) && Objects.equals(adopterName, adopter.adopterName) && Objects.equals(adopterPhoneNumber, adopter.adopterPhoneNumber) && Objects.equals(adopterTelegramId, adopter.adopterTelegramId) && Objects.equals(adopterReports, adopter.adopterReports);
+        return isContacted == adopter.isContacted && Objects.equals(id, adopter.id) && Objects.equals(adopterName, adopter.adopterName) && Objects.equals(adopterPhoneNumber, adopter.adopterPhoneNumber) && Objects.equals(adopterTelegramId, adopter.adopterTelegramId) && Objects.equals(adopterReports, adopter.adopterReports);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, adopterName, adopterPhoneNumber, adopterTelegramId, adopterReports);
+        return Objects.hash(id, adopterName, adopterPhoneNumber, adopterTelegramId, adopterReports, isContacted);
     }
 
     @Override
@@ -101,6 +111,7 @@ public class Adopter {
                 ", adopterPhoneNumber='" + adopterPhoneNumber + '\'' +
                 ", adopterTelegramId=" + adopterTelegramId +
                 ", adopterReports=" + adopterReports +
+                ", isContacted=" + isContacted +
                 '}';
     }
 }
