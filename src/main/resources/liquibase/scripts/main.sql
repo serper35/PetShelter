@@ -32,3 +32,10 @@ INSERT INTO info (key_word, message) VALUES ('HelloAdopter', 'Здравству
 INSERT INTO info (key_word, message) VALUES ('ReportIsReviewedFalse', 'Уважаемый(ая) {username}, ваш(и) отчёт(ы) скоро будут проверен(ы) волонтёрами.');
 INSERT INTO info (key_word, message) VALUES ('ReportsIsReviewedTrue', 'Все отчёты на сегодня проверены.');
 INSERT INTO info (key_word, message) VALUES ('ReportNotSend', 'Вы ещё не отправили отчёт сегодня.');
+
+-- changeset v.aliev:7
+INSERT INTO info (key_word, message) VALUES ('BotInformation', 'Бот, обслуживающий приюты домашних животных FirstTeam Pet Shelter. Разработан командой: Смирнов Юрий, Гельфер Павел, Волков Владислав, Вахитов Артур, Владислав Алиев');
+INSERT INTO info (key_word, message) VALUES ('CallingVolunteer', 'Спасибо за обращение {username}, волонтёры уже бегут к вам на помощь!');
+
+-- changeset v.aliev:8
+INSERT INTO info (key_word, message) VALUES ('UserNameAndPhoneNumber', 'Оставьте свои контактные данные. Имя и/или телефон. Если имя не указать, то будет использовано ваше имя из Telegram.');
