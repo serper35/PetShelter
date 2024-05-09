@@ -10,8 +10,8 @@ import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
 
+import java.time.LocalDateTime;
 import java.util.Collection;
-import java.util.Date;
 
 @RestController
 @RequestMapping("report/")
@@ -61,7 +61,7 @@ public class ReportController {
             tags = "Report"
     )
     @GetMapping("date/{date}")
-    public Collection<Report> getReportsByDate(@PathVariable(name = "Дата отчётов") Date date) {
+    public Collection<Report> getReportsByDate(@PathVariable(name = "Дата отчётов") LocalDateTime date) {
         return reportService.getReportsByDate(date);
     }
 

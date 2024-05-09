@@ -13,6 +13,7 @@ public class UserApp {
     private String userPhoneNumber;
     private Long userTelegramId;
     private boolean isContacted;
+    private boolean isBecomeAdoptive;   // Потенциальный усыновитель (false - нет, true - да)
 
     public UserApp() {
     }
@@ -35,12 +36,13 @@ public class UserApp {
         this.userTelegramId = userTelegramId;
     }
 
-    public UserApp(Long id, String userName, String userPhoneNumber, Long userTelegramId, boolean isContacted) {
+    public UserApp(Long id, String userName, String userPhoneNumber, Long userTelegramId, boolean isContacted, boolean isBecomeAdoptive) {
         this.id = id;
         this.userName = userName;
         this.userPhoneNumber = userPhoneNumber;
         this.userTelegramId = userTelegramId;
         this.isContacted = isContacted;
+        this.isBecomeAdoptive = isBecomeAdoptive;
     }
 
     public Long getId() {
@@ -79,6 +81,14 @@ public class UserApp {
         return isContacted;
     }
 
+    public boolean isBecomeAdoptive() {
+        return isBecomeAdoptive;
+    }
+
+    public void setBecomeAdoptive(boolean becomeAdoptive) {
+        isBecomeAdoptive = becomeAdoptive;
+    }
+
     public void setContacted(boolean contacted) {
         isContacted = contacted;
     }
@@ -88,12 +98,12 @@ public class UserApp {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         UserApp userApp = (UserApp) o;
-        return isContacted == userApp.isContacted && Objects.equals(id, userApp.id) && Objects.equals(userName, userApp.userName) && Objects.equals(userPhoneNumber, userApp.userPhoneNumber) && Objects.equals(userTelegramId, userApp.userTelegramId);
+        return isContacted == userApp.isContacted && isBecomeAdoptive == userApp.isBecomeAdoptive && Objects.equals(id, userApp.id) && Objects.equals(userName, userApp.userName) && Objects.equals(userPhoneNumber, userApp.userPhoneNumber) && Objects.equals(userTelegramId, userApp.userTelegramId);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, userName, userPhoneNumber, userTelegramId, isContacted);
+        return Objects.hash(id, userName, userPhoneNumber, userTelegramId, isContacted, isBecomeAdoptive);
     }
 
     @Override
@@ -104,6 +114,7 @@ public class UserApp {
                 ", userPhoneNumber='" + userPhoneNumber + '\'' +
                 ", userTelegramId=" + userTelegramId +
                 ", isContacted=" + isContacted +
+                ", isBecomeAdoptive=" + isBecomeAdoptive +
                 '}';
     }
 }

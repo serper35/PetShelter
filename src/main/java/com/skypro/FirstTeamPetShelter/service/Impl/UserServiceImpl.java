@@ -85,14 +85,8 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public UserApp getUserByTelegramId(long telegramId) {
-        logger.info("Method deleteUser was invoked");
+        logger.info("Method getUserByTelegramId was invoked");
 
-        UserApp user =  userRepository.findByUserTelegramId(telegramId);
-        if (user == null) {
-            throw new UserNotFoundException("Пользователь не найден");
-        }
-
-        logger.info("UserApp found");
-        return user;
+        return userRepository.findByUserTelegramId(telegramId);
     }
 }

@@ -9,13 +9,19 @@ public class Shelter {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+
     private String shelterName;
+
     @Column(length = 512)
     private String shelterInfo;             // Расписание работы и адрес
+
     @Column(length = 2048)
     private String securityContactDetail;   // Контактные данные охраны
+
     @Column(length = 65535)
     private String safetyInformation;       // Информация по безопасности на территории приюта
+
+    private String shelterType;
 
     public Shelter() {
     }
@@ -27,12 +33,13 @@ public class Shelter {
         this.safetyInformation = safetyInformation;
     }
 
-    public Shelter(Long id, String shelterName, String shelterInfo, String securityContactDetail, String safetyInformation) {
+    public Shelter(Long id, String shelterName, String shelterInfo, String securityContactDetail, String safetyInformation, String shelterType) {
         this.id = id;
         this.shelterName = shelterName;
         this.shelterInfo = shelterInfo;
         this.securityContactDetail = securityContactDetail;
         this.safetyInformation = safetyInformation;
+        this.shelterType = shelterType;
     }
 
     public Long getId() {
@@ -59,6 +66,14 @@ public class Shelter {
         this.shelterInfo = shelterInfo;
     }
 
+    public String getShelterType() {
+        return shelterType;
+    }
+
+    public void setShelterType(String shelterType) {
+        this.shelterType = shelterType;
+    }
+
     public String getSecurityContactDetail() {
         return securityContactDetail;
     }
@@ -80,12 +95,12 @@ public class Shelter {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         Shelter shelter = (Shelter) o;
-        return Objects.equals(id, shelter.id) && Objects.equals(shelterName, shelter.shelterName) && Objects.equals(shelterInfo, shelter.shelterInfo) && Objects.equals(securityContactDetail, shelter.securityContactDetail) && Objects.equals(safetyInformation, shelter.safetyInformation);
+        return Objects.equals(id, shelter.id) && Objects.equals(shelterName, shelter.shelterName) && Objects.equals(shelterInfo, shelter.shelterInfo) && Objects.equals(securityContactDetail, shelter.securityContactDetail) && Objects.equals(safetyInformation, shelter.safetyInformation) && Objects.equals(shelterType, shelter.shelterType);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, shelterName, shelterInfo, securityContactDetail, safetyInformation);
+        return Objects.hash(id, shelterName, shelterInfo, securityContactDetail, safetyInformation, shelterType);
     }
 
     @Override
@@ -96,6 +111,7 @@ public class Shelter {
                 ", shelterInfo='" + shelterInfo + '\'' +
                 ", securityContactDetail='" + securityContactDetail + '\'' +
                 ", safetyInformation='" + safetyInformation + '\'' +
+                ", shelterType='" + shelterType + '\'' +
                 '}';
     }
 }

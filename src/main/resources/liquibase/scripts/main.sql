@@ -27,3 +27,24 @@ INSERT INTO shelter (shelter_name, shelter_info, security_contact_detail, safety
 
 -- changeset v.aliev:5
 INSERT INTO info (key_word, message) VALUES ('HelloAdopter', 'Здравствуйте, {username}! Надеемся у вас с вашим четвероногим другом всё хорошо!');
+
+-- changeset v.aliev:6
+INSERT INTO info (key_word, message) VALUES ('ReportIsReviewedFalse', 'Уважаемый(ая) {username}, ваш(и) отчёт(ы) скоро будут проверен(ы) волонтёрами.');
+INSERT INTO info (key_word, message) VALUES ('ReportsIsReviewedTrue', 'Все отчёты на сегодня проверены.');
+INSERT INTO info (key_word, message) VALUES ('ReportNotSend', 'Вы ещё не отправили отчёт сегодня.');
+
+-- changeset v.aliev:7
+INSERT INTO info (key_word, message) VALUES ('BotInformation', 'Бот, обслуживающий приюты домашних животных FirstTeam Pet Shelter. Разработан командой: Смирнов Юрий, Гельфер Павел, Волков Владислав, Вахитов Артур, Владислав Алиев');
+INSERT INTO info (key_word, message) VALUES ('CallingVolunteer', 'Спасибо за обращение {username}, волонтёры уже бегут к вам на помощь!');
+
+-- changeset v.aliev:8
+INSERT INTO info (key_word, message) VALUES ('UserNameAndPhoneNumber', 'Оставьте свои контактные данные. Имя и/или телефон. Если имя не указать, то будет использовано ваше имя из Telegram.');
+
+-- changeset v.aliev:9
+INSERT INTO info (key_word, message) VALUES ('StartContacted', 'Надеемся вы решили все вопросы и готовы выбрать приют и питомца.');
+
+-- changeset v.aliev:10
+INSERT INTO info (key_word, message) VALUES ('ShelterHello', 'Добро пожаловать в {sheltertype} "{sheltername}". Для работы с приютом воспользуйтесь представленным ниже меню.');
+
+-- changeset v.aliev:11
+UPDATE info SET key_word = 'PhoneNumber', message = 'Введите свой номер телефона в формате +7-9**-***-**-**:' WHERE key_word = 'UserNameAndPhoneNumber';

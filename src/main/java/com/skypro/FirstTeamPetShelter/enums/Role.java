@@ -1,4 +1,4 @@
-package com.skypro.FirstTeamPetShelter.service.helper;
+package com.skypro.FirstTeamPetShelter.enums;
 
 public enum Role {
     NEWBIE,

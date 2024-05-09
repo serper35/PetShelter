@@ -2,8 +2,8 @@ package com.skypro.FirstTeamPetShelter.service;
 
 import com.skypro.FirstTeamPetShelter.model.Report;
 
+import java.time.LocalDateTime;
 import java.util.Collection;
-import java.util.Date;
 
 /**
  * Сервис отчета усыновителя животного
@@ -26,10 +26,19 @@ public interface ReportService {
 
     /**
      * Получить список отчетов на соответствующую дату
-     * @param date  - Дата
+     * @param dateTime  - Дата
      * @return      - Возвращает Collection<Report>
      */
-    Collection<Report> getReportsByDate(Date date);
+    Collection<Report> getReportsByDate(LocalDateTime dateTime);
+
+    /**
+     * Получение отчета по усыновителю, статусу
+     *
+     * @param adopter_id - ID усыновителя
+     * @param isReview   - статус (true - рассмотрен, false - не рассмотрен)
+     * @return - Report
+     */
+    Collection<Report> getReportsByAdopterAndReviewed(long adopter_id, boolean isReview);
 
     /**
      * Получить список отчетов по усыновителю
