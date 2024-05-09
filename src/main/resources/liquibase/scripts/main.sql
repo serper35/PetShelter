@@ -42,3 +42,9 @@ INSERT INTO info (key_word, message) VALUES ('UserNameAndPhoneNumber', 'Оста
 
 -- changeset v.aliev:9
 INSERT INTO info (key_word, message) VALUES ('StartContacted', 'Надеемся вы решили все вопросы и готовы выбрать приют и питомца.');
+
+-- changeset v.aliev:10
+INSERT INTO info (key_word, message) VALUES ('ShelterHello', 'Добро пожаловать в {sheltertype} "{sheltername}". Для работы с приютом воспользуйтесь представленным ниже меню.');
+
+-- changeset v.aliev:11
+UPDATE info SET key_word = 'PhoneNumber', message = 'Введите свой номер телефона в формате +7-9**-***-**-**:' WHERE key_word = 'UserNameAndPhoneNumber';
