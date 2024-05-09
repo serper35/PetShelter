@@ -26,27 +26,6 @@ public class TelegramBotUpdatesListener implements UpdatesListener {
     @Autowired
     private BotHandler botHandler;
 
-    @Autowired
-    private BotMenuService botMenuService;
-
-    @Autowired
-    private BotService botService;
-
-//    @Autowired
-//    private InfoService infoService;
-//
-    @Autowired
-    private UserService userService;
-//
-//    @Autowired
-//    private ShelterService shelterService;
-//
-//    @Autowired
-//    private ReportService reportService;
-//
-//    @Autowired
-//    private AdopterService adopterService;
-
     @PostConstruct
     public void init() {
         telegramBot.setUpdatesListener(this);

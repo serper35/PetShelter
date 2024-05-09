@@ -5,12 +5,9 @@ import com.skypro.FirstTeamPetShelter.model.Adopter;
 import com.skypro.FirstTeamPetShelter.model.Report;
 import com.skypro.FirstTeamPetShelter.model.Shelter;
 import com.skypro.FirstTeamPetShelter.model.UserApp;
-import com.skypro.FirstTeamPetShelter.service.AdopterService;
 import com.skypro.FirstTeamPetShelter.service.ShelterService;
-import com.skypro.FirstTeamPetShelter.service.UserService;
 import com.skypro.FirstTeamPetShelter.service.bot.BotMenuService;
 import com.skypro.FirstTeamPetShelter.enums.Menu;
-import com.skypro.FirstTeamPetShelter.service.bot.BotService;
 import com.skypro.FirstTeamPetShelter.service.bot.helper.BotHelper;
 import org.springframework.stereotype.Service;
 
@@ -53,8 +50,26 @@ public class BotMenuServiceImpl implements BotMenuService {
             case USERNAME_PHONE_NUMBER -> {
                 return getUsernamePhoneNumberMenu();
             }
+            case SHELTER_BASE -> {
+                return getShelterBaseMenu();
+            }
+            case SHELTER_DOGS -> {
+                //return getShelterDogMenu();
+            }
+            case SHELTER_CATS -> {
+                //return getShelterCatMenu();
+            }
         }
         return null;
+    }
+
+    private InlineKeyboardMarkup getShelterBaseMenu() {
+        InlineKeyboardMarkup inlineKeyboardMarkup = new InlineKeyboardMarkup();
+        inlineKeyboardMarkup.addRow(new InlineKeyboardButton("⌚Расписание и \uD83D\uDEE3схема проезда").callbackData("ShelterInfo"), new InlineKeyboardButton("Контакты для проезда").callbackData("ShelterSecurity"));
+        inlineKeyboardMarkup.addRow(new InlineKeyboardButton("ТБ на территории").callbackData("ShelterSafety"), new InlineKeyboardButton("Выбрать животное").callbackData("ShelterFindPet"));
+        inlineKeyboardMarkup.addRow(new InlineKeyboardButton("Оставить номер для связи").callbackData("PhoneNumber"));
+
+        return inlineKeyboardMarkup;
     }
 
     private InlineKeyboardMarkup getUsernamePhoneNumberMenu() {

@@ -33,6 +33,7 @@ public class PetServiceImpl implements PetService {
     @Override
     public Collection<Pet> getAllPets() {
         logger.info("Log info: Method getAllPets is invoke.");
+        // todo: Реализовать пагинацию
         return petServiceRepository.findAll();
     }
 
