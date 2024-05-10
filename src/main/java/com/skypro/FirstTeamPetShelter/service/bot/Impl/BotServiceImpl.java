@@ -151,11 +151,11 @@ public class BotServiceImpl implements BotService {
     }
 
     @Override
-    public void executeImageMessage(String caption, TelegramBot telegramBot, CallbackQuery callbackQuery, Menu menu, byte[] Image) {
+    public void executeImageMessage(String caption, TelegramBot telegramBot, CallbackQuery callbackQuery, Menu menu, byte[] Image, Shelter shelter) {
         SendPhoto sendPhoto;
         try {
             sendPhoto = new SendPhoto(callbackQuery.from().id(), Image);
-            sendPhoto.caption(caption);
+            sendPhoto.caption(parseMessageText(null, shelter, caption));
             if (menu != null) {
                 sendPhoto.replyMarkup(botMenuService.getMenu(menu));
             }
