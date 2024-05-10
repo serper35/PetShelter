@@ -75,12 +75,30 @@ public class PetAvatarServiceImpl implements PetAvatarService {
     public Collection<PetAvatar> getAllPetAvatars(int pageNumber, int pageSize) {
         logger.info("Log info: Method getAllPetAvatars is invoke.");
         PageRequest pageRequest = PageRequest.of(pageNumber - 1, pageSize);
-        return petAvatarRepository.findAll(pageRequest).getContent(); //getContent??
+        return petAvatarRepository.findAll(pageRequest).getContent();
     }
 
     @Override
-    public PetAvatar editPetAvatar(long id) {
-        return null;
+    public void  editPetAvatar(Long id, MultipartFile petAvatarFile) throws IOException { // Та же логика, что и при загрузке нового аватара, предлагаю удалить
+        logger.info("Log info: Method uploadAvatar is invoke.");
+        Pet pet = petService.getPet(id);
+        Path pathFile = Path.of(petAvatarsDir, pet + "." + getExtension(petAvatarFile.getOriginalFilename()));
+        Files.createDirectories(pathFile.getParent());
+        Files.deleteIfExists(pathFile);
+        try (InputStream inputStream = petAvatarFile.getInputStream();
+             OutputStream outputStream = Files.newOutputStream(pathFile, CREATE_NEW);
+             BufferedInputStream bufferedInputStream = new BufferedInputStream(inputStream, 1024);
+             BufferedOutputStream bufferedOutputStream = new BufferedOutputStream(outputStream, 1024);
+        ) {
+            bufferedInputStream.transferTo(bufferedOutputStream);
+        }
+        PetAvatar petAvatar = findPetAvatar(id);
+        petAvatar.setPet(pet);
+        petAvatar.setFilePath(pathFile.toString());
+        petAvatar.setFileSize(petAvatarFile.getSize());
+        petAvatar.setMediaType(petAvatarFile.getContentType());
+        petAvatar.setSmallAvatar(petAvatarFile.getBytes());
+        petAvatarRepository.save(petAvatar);
     }
 
     @Override
