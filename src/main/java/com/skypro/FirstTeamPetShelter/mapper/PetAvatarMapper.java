@@ -2,7 +2,9 @@ package com.skypro.FirstTeamPetShelter.mapper;
 
 import com.skypro.FirstTeamPetShelter.DTO.PetAvatarDTO;
 import com.skypro.FirstTeamPetShelter.model.PetAvatar;
+import org.springframework.stereotype.Component;
 
+@Component
 public class PetAvatarMapper {
     public PetAvatarDTO matToDTO(PetAvatar petAvatar) {
         PetAvatarDTO avatarDTO = new PetAvatarDTO();
