@@ -1,5 +1,6 @@
 package com.skypro.FirstTeamPetShelter.model;
 
+import com.skypro.FirstTeamPetShelter.enums.PetHealth;
 import jakarta.persistence.*;
 
 import java.util.Objects;
@@ -19,7 +20,7 @@ public class Pet {
     @OneToOne
     private PetAvatar petAvatar;
     @OneToOne
-    private User petOwner;
+    private UserApp petOwner;
 
     public Pet() {
     }
@@ -57,7 +58,7 @@ public class Pet {
         this.petAvatar = petAvatar;
     }
 
-    public Pet(String petType, String petBreed, String petGender, PetHealth petHealth, String petName, int petAge, String petDescription, PetAvatar petAvatar, User petOwner) {
+    public Pet(String petType, String petBreed, String petGender, PetHealth petHealth, String petName, int petAge, String petDescription, PetAvatar petAvatar, UserApp petOwner) {
         this.petType = petType;
         this.petBreed = petBreed;
         this.petGender = petGender;
@@ -141,11 +142,11 @@ public class Pet {
         this.petAvatar = petAvatar;
     }
 
-    public User getPetOwner() {
+    public UserApp getPetOwner() {
         return petOwner;
     }
 
-    public void setPetOwner(User petOwner) {
+    public void setPetOwner(UserApp petOwner) {
         this.petOwner = petOwner;
     }
 

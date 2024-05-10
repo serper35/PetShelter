@@ -2,8 +2,8 @@ package com.skypro.FirstTeamPetShelter.service;
 
 import com.skypro.FirstTeamPetShelter.model.Report;
 
+import java.time.LocalDateTime;
 import java.util.Collection;
-import java.util.Date;
 
 /**
  * Сервис отчета усыновителя животного
@@ -26,17 +26,26 @@ public interface ReportService {
 
     /**
      * Получить список отчетов на соответствующую дату
-     * @param date  - Дата
+     * @param dateTime  - Дата
      * @return      - Возвращает Collection<Report>
      */
-    Collection<Report> getReportsByDate(Date date);
+    Collection<Report> getReportsByDate(LocalDateTime dateTime);
 
     /**
-     * Получить список отчетов по пользователю
-     * @param user_id   - ID пользователя
+     * Получение отчета по усыновителю, статусу
+     *
+     * @param adopter_id - ID усыновителя
+     * @param isReview   - статус (true - рассмотрен, false - не рассмотрен)
+     * @return - Report
+     */
+    Collection<Report> getReportsByAdopterAndReviewed(long adopter_id, boolean isReview);
+
+    /**
+     * Получить список отчетов по усыновителю
+     * @param adopter_id   - ID усыновителя
      * @return          - Возвращает Collection<Report>
      */
-    Collection<Report> getReportsByUser(long user_id);
+    Collection<Report> getReportsByAdopter(long adopter_id);
 
     /**
      * Получить все отчеты
@@ -46,11 +55,12 @@ public interface ReportService {
 
     /**
      * Отредактировать отчет
-     * @param id    - ID отчета
-     * @return      - Возвращает Report
+     * @param id     - ID отчета
+     * @param report - Report
+     * @return       - Возвращает Report
      * @throws com.skypro.FirstTeamPetShelter.exception.ReportNotFoundException, если отчет не найден
      */
-    Report editReport(long id);
+    Report editReport(long id, Report report);
 
     /**
      * Удалить отчет

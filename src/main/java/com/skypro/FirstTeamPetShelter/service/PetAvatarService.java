@@ -49,7 +49,7 @@ public interface PetAvatarService {
      * @return          - Возвращает PetAvatar
      * @throws com.skypro.FirstTeamPetShelter.exception.PetAvatarNotFoundException, если аватар питомца не найден
      */
-    PetAvatar editPetAvatar(long id);
+    void editPetAvatar(Long id, MultipartFile petAvatarFile) throws IOException;
 
     /**
      * Удалить аватар питомца

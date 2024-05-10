@@ -6,5 +6,5 @@ import org.springframework.stereotype.Repository;
 
 @Repository
 public interface PetServiceRepository extends JpaRepository<Pet, Long> {
-
+    // todo: Реализовать пагинацию
 }

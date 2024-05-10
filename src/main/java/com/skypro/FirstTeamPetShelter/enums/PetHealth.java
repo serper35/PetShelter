@@ -1,4 +1,4 @@
-package com.skypro.FirstTeamPetShelter.model;
+package com.skypro.FirstTeamPetShelter.enums;
 
 /**
  * Здоровье животного

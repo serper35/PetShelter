@@ -10,7 +10,7 @@ import java.util.Collection;
 @RestController
 @RequestMapping("shelter")
 public class ShelterController {
-    private ShelterService shelterService;
+    private final ShelterService shelterService;
 
     public ShelterController(ShelterService shelterService) {
         this.shelterService = shelterService;
