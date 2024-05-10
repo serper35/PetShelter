@@ -17,7 +17,7 @@ import java.util.stream.Collectors;
 
 @RestController("pet")
 public class PetAvatarController {
-    private PetAvatarService petAvatarService;
+    private final PetAvatarService petAvatarService;
     private final PetAvatarMapper petAvatarMapper;
 
     public PetAvatarController(PetAvatarService petAvatarService, PetAvatarMapper petAvatarMapper) {

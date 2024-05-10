@@ -188,11 +188,11 @@ public class BotServiceImpl implements BotService {
             String userPhone = userService.getUserByTelegramId(telegramUser.id()).getUserPhoneNumber();
             result = userPhone != null ? result.replace("{usercontact}", userPhone) : result.replace("usercontact", "нет номера");
         }
-        if (result.contains("sheltertype")) {
+        if (result.contains("{sheltertype}")) {
             if (shelter.getShelterType().equalsIgnoreCase("dog")) {
                 result = result.replace("{sheltertype}", "собачий приют");
             } else if(shelter.getShelterType().equalsIgnoreCase("cat")) {
-                result = result.replace("sheltertype", "кошачий приют");
+                result = result.replace("{sheltertype}", "кошачий приют");
             }
         }
         if (result.contains("{sheltername}")) {
