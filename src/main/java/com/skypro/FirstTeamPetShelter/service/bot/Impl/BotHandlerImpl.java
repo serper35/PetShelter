@@ -120,7 +120,7 @@ public class BotHandlerImpl implements BotHandler {
                 } else if (shelter.getShelterType().equalsIgnoreCase("cat")) {
                     menu = Menu.SHELTER_CATS;
                 }
-                botService.executeImageMessage(petService.getPet(petId).getPetName(), telegramBot, callbackQuery, menu, petService.getPet(petId).getPetAvatar().getSmallAvatar());
+                botService.executeImageMessage(petService.getPet(petId).getPetName(), telegramBot, callbackQuery, menu, petService.getPet(petId).getPetAvatar().getSmallAvatar(), shelter);
             }
         }
     }
@@ -221,6 +221,6 @@ public class BotHandlerImpl implements BotHandler {
 
     private void sendCallbackImageMessage(String message, TelegramBot telegramBot, CallbackQuery callbackQuery, Menu menu, Shelter shelter, byte[] shelterImage) {
         String caption = message.equals("ShelterHello") ? infoService.getMessage(message) : message;
-        botService.executeImageMessage(caption, telegramBot, callbackQuery, menu, shelterImage);
+        botService.executeImageMessage(caption, telegramBot, callbackQuery, menu, shelterImage, shelter);
     }
 }

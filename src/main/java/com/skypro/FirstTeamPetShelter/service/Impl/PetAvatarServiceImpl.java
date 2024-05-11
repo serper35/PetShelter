@@ -41,7 +41,7 @@ public class PetAvatarServiceImpl implements PetAvatarService {
     public void  addPetAvatar(Long id, MultipartFile petAvatarFile) throws IOException {
         logger.info("Log info: Method uploadAvatar is invoke.");
         Pet pet = petService.getPet(id);
-        Path pathFile = Path.of(petAvatarsDir, pet + "." + getExtension(petAvatarFile.getOriginalFilename()));
+        Path pathFile = Path.of(petAvatarsDir, pet.getPetType() + "_" + pet.getId() + "." + getExtension(petAvatarFile.getOriginalFilename()));
         Files.createDirectories(pathFile.getParent());
         Files.deleteIfExists(pathFile);
         try (InputStream inputStream = petAvatarFile.getInputStream();
