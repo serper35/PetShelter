@@ -31,6 +31,13 @@ public interface PetService {
     Collection<Pet> getAllPets();
 
     /**
+     * Получение всех питомцев по их типу
+     * @param petType - тип питомца (dog или cat)
+     * @return        - Collection<Pet>
+     */
+    Collection<Pet> getPetsByPetType(String petType);
+
+    /**
      * Редактирование животного
      * @param id    - ID животного
      * @param pet    - новые сведения об объекте класса Pet

@@ -96,7 +96,7 @@ public class BotServiceImpl implements BotService {
     @Override
     public void getPets(TelegramBot telegramBot, CallbackQuery callbackQuery, Shelter shelter) {
         // todo: Реализовать пагинацию
-        List<Pet> pets = petService.getAllPets().stream().toList();
+        List<Pet> pets = petService.getPetsByPetType(shelter.getShelterType()).stream().toList();
         for (Pet pet: pets) {
             SendPhoto sendPhoto = new SendPhoto(callbackQuery.from().id(), petAvatarService.getPetAvatarByPet(pet.getId()).getSmallAvatar());
             sendPhoto.caption(pet.getPetName() + " " + pet.getPetAge() + " " + pet.getPetGender());

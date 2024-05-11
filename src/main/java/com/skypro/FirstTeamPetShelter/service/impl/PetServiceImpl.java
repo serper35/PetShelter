@@ -8,6 +8,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 
 import java.util.Collection;
+import java.util.List;
 
 @Service
 public class PetServiceImpl implements PetService {
@@ -35,6 +36,11 @@ public class PetServiceImpl implements PetService {
         logger.info("Log info: Method getAllPets is invoke.");
         // todo: Реализовать пагинацию
         return petServiceRepository.findAll();
+    }
+
+    @Override
+    public Collection<Pet> getPetsByPetType(String petType) {
+        return petServiceRepository.findAllByPetType(petType);
     }
 
     @Override
