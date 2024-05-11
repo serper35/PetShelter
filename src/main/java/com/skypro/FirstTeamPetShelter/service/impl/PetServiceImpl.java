@@ -44,6 +44,11 @@ public class PetServiceImpl implements PetService {
     }
 
     @Override
+    public Pet getPetByOwner(long owner_id) {
+        return petServiceRepository.findByPetOwnerId(owner_id);
+    }
+
+    @Override
     public Pet editPet(long id, Pet pet) {
         logger.info("Log info: Method editPet is invoke.");
         return petServiceRepository.findById(id)

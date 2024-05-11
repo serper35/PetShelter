@@ -94,6 +94,38 @@ public class BotServiceImpl implements BotService {
     }
 
     @Override
+    public void setAdoptiveParent(Pet pet, TelegramBot telegramBot, CallbackQuery callbackQuery) {
+        long userId = callbackQuery.from().id();
+        Role role = getVisitorRole(callbackQuery.from().id());
+        String result = "";
+        if (role == Role.NEWBIE) {
+            UserApp userApp = new UserApp();
+            userApp.setUserTelegramId(userId);
+            userApp.setUserName(callbackQuery.from().firstName());
+            userApp.setBecomeAdoptive(true);
+            userApp.setContacted(false);
+            userService.addUser(userApp);
+            result = "Оставьте свой номер телефона в формате +7-9**-***-**-** и с вами вскоре свяжутся наши волонтёры для определения деталей усыновления питомца.";
+        } else if (role == Role.USER) {
+            if (!userService.getUserByTelegramId(userId).isBecomeAdoptive()) {
+                if (userService.getUserByTelegramId(userId).getUserPhoneNumber() != null) {
+                    result = "Ваш номер телефона: "
+                            + userService.getUserByTelegramId(userId).getUserPhoneNumber()
+                            + "С вами скоро свяжутся наши волонтеры, чтобы уточнить детали усыновления питомца. Либо введите другой номер для связи в формате +7-9**-***-**-**";
+                } else {
+                    result = "Оставьте свой номер телефона в формате +7-9**-***-**-** и с вами вскоре свяжутся наши волонтёры для определения деталей усыновления питомца.";
+                }
+                userService.getUserByTelegramId(userId).setBecomeAdoptive(true);
+            } else {
+                result = "Вы уже выбрали питомца для усыновления. Для отказа от усыновления или для решения других вопросов обратитесь к волонтёрам.";
+            }
+        } else if (role == Role.ADOPTER) {
+            result = "У вас уже есть питомец " + petService.getPetByOwner(userId).getPetName() + ". Если есть проблемы, то свяжитесь с волонтёрами";
+        }
+        executeMessage(telegramBot, userId, result, null);
+    }
+
+    @Override
     public void getPets(TelegramBot telegramBot, CallbackQuery callbackQuery, Shelter shelter) {
         // todo: Реализовать пагинацию
         List<Pet> pets = petService.getPetsByPetType(shelter.getShelterType()).stream().toList();

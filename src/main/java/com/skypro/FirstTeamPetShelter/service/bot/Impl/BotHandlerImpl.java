@@ -21,6 +21,7 @@ import java.time.LocalDateTime;
 @Transactional
 public class BotHandlerImpl implements BotHandler {
     Shelter shelter =  null;
+    long petId = 0;
     @Autowired
     private BotService botService;
 
@@ -96,6 +97,7 @@ public class BotHandlerImpl implements BotHandler {
             sendCallbackImageMessage("ShelterHello", telegramBot, callbackQuery, Menu.SHELTER_BASE, shelter, shelterImage);
         }
         if (shelter != null) {
+            String shelterType = firstLetterToUpperCase(shelter.getShelterType());
             if (callbackQuery.data().equals("ShelterInfo")) {
                 byte[] shelterImage = shelterImageService.getShelterImageByShelterId(shelter.getId()).getShelterDrivingDirection();
                 sendCallbackImageMessage(shelter.getShelterInfo(), telegramBot, callbackQuery, null, shelter, shelterImage);
@@ -113,7 +115,7 @@ public class BotHandlerImpl implements BotHandler {
                 sendCallbackMessage("PhoneNumber", telegramBot, callbackQuery, null, null);
             }
             if (callbackQuery.data().contains("PetSelect_")) {
-                long petId = Long.parseLong(callbackQuery.data().replace("PetSelect_", ""));
+                petId = Long.parseLong(callbackQuery.data().replace("PetSelect_", ""));
                 Menu menu = null;
                 if (shelter.getShelterType().equalsIgnoreCase("dog")) {
                     menu = Menu.SHELTER_DOGS;
@@ -122,7 +124,38 @@ public class BotHandlerImpl implements BotHandler {
                 }
                 botService.executeImageMessage(petService.getPet(petId).getPetName(), telegramBot, callbackQuery, menu, petService.getPet(petId).getPetAvatar().getSmallAvatar(), shelter);
             }
+            if (callbackQuery.data().equals("PetRules")) {
+                sendCallbackMessage(shelterType + "PetRules", telegramBot, callbackQuery, null, null);
+            }
+            if (callbackQuery.data().equals("PetNeedDocuments")) {
+                sendCallbackMessage(shelterType + "PetNeedDocuments", telegramBot, callbackQuery, null, null);
+            }
+            if (callbackQuery.data().equals("PetTransport")) {
+                sendCallbackMessage(shelterType + "PetTransport", telegramBot, callbackQuery, null, null);
+            }
+            if (callbackQuery.data().equals("PetHome")) {
+                sendCallbackMessage(shelterType + "PetHome", telegramBot, callbackQuery, null, null);
+            }
+            if (callbackQuery.data().equals("DogHandlerAdvice")) {
+                sendCallbackMessage("DogHandlerAdvice", telegramBot, callbackQuery, null, null);
+            }
+            if (callbackQuery.data().equals("DogHandlers")) {
+                sendCallbackMessage("DogHandlers", telegramBot, callbackQuery, null, null);
+            }
+            if (callbackQuery.data().equals("PetReasonsForRefusal")) {
+                sendCallbackMessage(shelterType + "PetReasonsForRefusal", telegramBot, callbackQuery, null, null);
+            }
+            if (callbackQuery.data().equals("GetPet")) {
+                if (petId != 0) {
+                    botService.setAdoptiveParent(petService.getPet(petId), telegramBot, callbackQuery);
+                }
+            }
         }
+    }
+
+    private String firstLetterToUpperCase(String word) {
+        word = word.toLowerCase();
+        return word.substring(0, 1).toUpperCase() + word.substring(1);
     }
 
     private void volunteerUpdateHandle(TelegramBot telegramBot, Update update) {

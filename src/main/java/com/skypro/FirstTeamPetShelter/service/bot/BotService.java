@@ -3,6 +3,7 @@ package com.skypro.FirstTeamPetShelter.service.bot;
 import com.pengrad.telegrambot.TelegramBot;
 import com.pengrad.telegrambot.model.CallbackQuery;
 import com.pengrad.telegrambot.model.Update;
+import com.skypro.FirstTeamPetShelter.model.Pet;
 import com.skypro.FirstTeamPetShelter.model.Shelter;
 import com.skypro.FirstTeamPetShelter.enums.Menu;
 import com.skypro.FirstTeamPetShelter.enums.Role;
@@ -19,7 +20,7 @@ public interface BotService {
     void executeMessage(TelegramBot telegramBot, Long id, String messageText, Menu menu);
     void executeImageMessage(String caption, TelegramBot telegramBot, CallbackQuery callbackQuery, Menu menu, byte[] Image, Shelter shelter);
     void callVolunteer(TelegramBot telegramBot, Update update);
-
+    void setAdoptiveParent(Pet pet, TelegramBot telegramBot, CallbackQuery callbackQuery);
     void getPets(TelegramBot telegramBot, CallbackQuery callbackQuery, Shelter shelter);
     void setUserPhone(String phone, TelegramBot telegramBot, Update update);
 }
