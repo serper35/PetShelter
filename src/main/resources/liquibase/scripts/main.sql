@@ -60,3 +60,7 @@ INSERT INTO info (key_word, message) VALUES ('DogPetHome', 'Подготовка
 INSERT INTO info (key_word, message) VALUES ('CatPetHome', 'Подготовка дома к появлению кошки: https://bfba.ru/chelovek-i-koshka/podgotovka-doma-k-poyavleniyu-koshki.html');
 INSERT INTO info (key_word, message) VALUES ('DogHandlerAdvice', 'Советы кинолога: https://hvost.news/animals/puppies-raising/s-chego-nachat-vospitanie-shchenka/');
 INSERT INTO info (key_word, message) VALUES ('DogHandlers', 'Наши кинологи, которые готовы вам помочь: Саша - тел.: 8(999)999-99-99, Рустам - тел.: 8(000)000-00-00');
+
+-- changeset v.aliev:13
+INSERT INTO info (key_word, message) VALUES ('DogPetReasonsForRefusal', 'Возможные причины отказа: аллергия (у вас или у членов вашей семьи), не готовность вас взять на себя ответственность за собаку (определяется на этапе собеседования), предыдущий негативный опыт.');
+INSERT INTO info (key_word, message) VALUES ('CatPetReasonsForRefusal', 'Возможные причины отказа: аллергия (у вас или у членов вашей семьи), не готовность вас взять на себя ответственность за кошку (определяется на этапе собеседования), предыдущий негативный опыт.');
