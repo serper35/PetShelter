@@ -8,6 +8,9 @@ import com.skypro.FirstTeamPetShelter.model.Shelter;
 import com.skypro.FirstTeamPetShelter.enums.Menu;
 import com.skypro.FirstTeamPetShelter.enums.Role;
 
+/**
+ * Сервис бота
+ */
 public interface BotService {
     /**
      * Возвращает роль посетителя бота по ID в Telegram
