@@ -54,13 +54,26 @@ public class BotMenuServiceImpl implements BotMenuService {
                 return getShelterBaseMenu();
             }
             case SHELTER_DOGS -> {
-                //return getShelterDogMenu();
+                return getShelterPetMenu("dog");
             }
             case SHELTER_CATS -> {
-                //return getShelterCatMenu();
+                return getShelterPetMenu("cat");
             }
         }
         return null;
+    }
+
+    private InlineKeyboardMarkup getShelterPetMenu(String petType) {
+        InlineKeyboardMarkup inlineKeyboardMarkup = new InlineKeyboardMarkup();
+        inlineKeyboardMarkup.addRow(new InlineKeyboardButton("Правила знакомства").callbackData("PetRules"));
+        inlineKeyboardMarkup.addRow(new InlineKeyboardButton("Список документов").callbackData("PetNeedDocuments"));
+        inlineKeyboardMarkup.addRow(new InlineKeyboardButton("Транспортировка").callbackData("PetTransport"), new InlineKeyboardButton("Обустройство дома").callbackData("PetHome"));
+        if (petType.equalsIgnoreCase("dog")) {
+            inlineKeyboardMarkup.addRow(new InlineKeyboardButton("Советы кинолога").callbackData("DogHandlerAdvice"));
+            inlineKeyboardMarkup.addRow(new InlineKeyboardButton("Кинологи").callbackData("DogHandlers"));
+        }
+        inlineKeyboardMarkup.addRow(new InlineKeyboardButton("Причины отказа").callbackData("PetReasonsForRefusal"), new InlineKeyboardButton("Оставить номер для связи").callbackData("PhoneNumber"));
+        return inlineKeyboardMarkup;
     }
 
     private InlineKeyboardMarkup getShelterBaseMenu() {
