@@ -30,30 +30,30 @@
 <details>
     <summary>Начало работы с ботом, вывод собачьего приюта и информации о нём</summary>
 
-![Start-DogShelter-ShelterInfo.png](src/main/resources/images/Start-DogShelter-ShelterInfo.png)
+![Start-DogShelter-ShelterInfo.png](images/Start-DogShelter-ShelterInfo.png)
 </details>
 <details>
     <summary>Расписание и схема проезда + Контакты для пропуска + ТБ + Выбор питомца</summary>
 
-![Расписание и схема проезда + Контакты для пропуска + ТБ + Выбор питомца](src/main/resources/images/Contacts-SafetyInfo-SelectionPet.png)
+![Расписание и схема проезда + Контакты для пропуска + ТБ + Выбор питомца](images/Contacts-SafetyInfo-SelectionPet.png)
 </details>
 <details>
 <summary>Ввод номера телефона (корректный)</summary>
 
-![PhoneNumberCorrect.png](src/main/resources/images/PhoneNumberCorrect.png)
+![PhoneNumberCorrect.png](images/PhoneNumberCorrect.png)
 </details>
 <details>
 <summary>Ввод номера телефона (не корректный)</summary>
 
-![PhoneNumberIncorrect.png](src/main/resources/images/PhoneNumberIncorrect.png)
+![PhoneNumberIncorrect.png](images/PhoneNumberIncorrect.png)
 </details>
 <details>
 <summary>Список питомцев кошачьего приюта и меню для выбранной кошки</summary>
 
-![SelectCat.png](src/main/resources/images/SelectCat.png)
+![SelectCat.png](images/SelectCat.png)
 </details>
 <details>
 <summary>Список питомцев собачьего приюта и меню для выбранной собаки</summary>
 
-![SelectDog.png](src/main/resources/images/SelectDog.png)
+![SelectDog.png](images/SelectDog.png)
 </details>
