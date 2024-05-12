@@ -38,8 +38,15 @@ public interface PetService {
     Collection<Pet> getPetsByPetType(String petType);
 
     /**
+     * Получение питомца по его потенциальному владельцу
+     * @param potential_owner_id    - ID потенциального владельца (UserApp)
+     * @return                      - Pet
+     */
+    Pet getPetByPotentialOwner(long potential_owner_id);
+
+    /**
      * Получение питомца по его владельцу
-     * @param owner_id  - владелец питомца
+     * @param owner_id  - владелец питомца (Adopter)
      * @return          - Pet
      */
     Pet getPetByOwner(long owner_id);

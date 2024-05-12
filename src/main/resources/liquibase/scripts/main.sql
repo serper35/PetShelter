@@ -64,3 +64,10 @@ INSERT INTO info (key_word, message) VALUES ('DogHandlers', 'Наши кинол
 -- changeset v.aliev:13
 INSERT INTO info (key_word, message) VALUES ('DogPetReasonsForRefusal', 'Возможные причины отказа: аллергия (у вас или у членов вашей семьи), не готовность вас взять на себя ответственность за собаку (определяется на этапе собеседования), предыдущий негативный опыт.');
 INSERT INTO info (key_word, message) VALUES ('CatPetReasonsForRefusal', 'Возможные причины отказа: аллергия (у вас или у членов вашей семьи), не готовность вас взять на себя ответственность за кошку (определяется на этапе собеседования), предыдущий негативный опыт.');
+
+-- changeset v.aliev:14
+INSERT INTO info (key_word, message) VALUES ('ReportFromAdopterStart', 'Хотите отправить отчёт? Ну что ж начнём - отправьте фото вашего питомца...');
+INSERT INTO info (key_word, message) VALUES ('ReportPetDiet', 'Опишите диету питомца. Первым словом напишите "диета"...');
+INSERT INTO info (key_word, message) VALUES ('ReportPetHealthAndAdaptation', 'Опишите общее самочувствие питомца, его здоровье и как проходит адаптация. Начните сообщение со слова "здоровье"...');
+INSERT INTO info (key_word, message) VALUES ('ReportPetChangeBehavior', 'Есть ли какие-то изменения в поведении (отказ от старых привычек, приобретение новых). Начните сообщение со слова "поведение"');
+INSERT INTO info (key_word, message) VALUES ('ReportCompleteAndSave', 'Спасибо! Ваш отчёт сохранён и вскоре будет рассмотрен волонтёрами.');

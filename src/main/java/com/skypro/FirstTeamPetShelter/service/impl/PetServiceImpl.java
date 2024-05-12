@@ -12,12 +12,12 @@ import java.util.List;
 
 @Service
 public class PetServiceImpl implements PetService {
+    private final PetServiceRepository petServiceRepository;
+    private static final Logger logger = LoggerFactory.getLogger(PetServiceImpl.class);
 
     public PetServiceImpl(PetServiceRepository petServiceRepository) {
         this.petServiceRepository = petServiceRepository;
     }
-    private final PetServiceRepository petServiceRepository;
-    private static final Logger logger = LoggerFactory.getLogger(PetServiceImpl.class);
 
     @Override
     public Pet addPet(Pet pet) {
@@ -41,6 +41,11 @@ public class PetServiceImpl implements PetService {
     @Override
     public Collection<Pet> getPetsByPetType(String petType) {
         return petServiceRepository.findAllByPetType(petType);
+    }
+
+    @Override
+    public Pet getPetByPotentialOwner(long potential_owner_id) {
+        return petServiceRepository.findByPetPotentialOwnerId(potential_owner_id);
     }
 
     @Override

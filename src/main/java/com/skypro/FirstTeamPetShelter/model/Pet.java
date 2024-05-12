@@ -20,7 +20,9 @@ public class Pet {
     @OneToOne
     private PetAvatar petAvatar;
     @OneToOne
-    private UserApp petOwner;
+    private UserApp petPotentialOwner;
+    @OneToOne
+    private Adopter petOwner;
 
     public Pet() {
     }
@@ -58,7 +60,7 @@ public class Pet {
         this.petAvatar = petAvatar;
     }
 
-    public Pet(String petType, String petBreed, String petGender, PetHealth petHealth, String petName, int petAge, String petDescription, PetAvatar petAvatar, UserApp petOwner) {
+    public Pet(String petType, String petBreed, String petGender, PetHealth petHealth, String petName, int petAge, String petDescription, PetAvatar petAvatar, UserApp petPotentialOwner, Adopter petOwner) {
         this.petType = petType;
         this.petBreed = petBreed;
         this.petGender = petGender;
@@ -67,6 +69,7 @@ public class Pet {
         this.petAge = petAge;
         this.petDescription = petDescription;
         this.petAvatar = petAvatar;
+        this.petPotentialOwner = petPotentialOwner;
         this.petOwner = petOwner;
     }
 
@@ -142,11 +145,19 @@ public class Pet {
         this.petAvatar = petAvatar;
     }
 
-    public UserApp getPetOwner() {
+    public UserApp getPetPotentialOwner() {
+        return petPotentialOwner;
+    }
+
+    public void setPetPotentialOwner(UserApp petPotentialOwner) {
+        this.petPotentialOwner = petPotentialOwner;
+    }
+
+    public Adopter getPetOwner() {
         return petOwner;
     }
 
-    public void setPetOwner(UserApp petOwner) {
+    public void setPetOwner(Adopter petOwner) {
         this.petOwner = petOwner;
     }
 
@@ -155,12 +166,12 @@ public class Pet {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         Pet pet = (Pet) o;
-        return petAge == pet.petAge && Objects.equals(id, pet.id) && Objects.equals(petType, pet.petType) && Objects.equals(petBreed, pet.petBreed) && Objects.equals(petGender, pet.petGender) && petHealth == pet.petHealth && Objects.equals(petName, pet.petName) && Objects.equals(petDescription, pet.petDescription) && Objects.equals(petAvatar, pet.petAvatar) && Objects.equals(petOwner, pet.petOwner);
+        return petAge == pet.petAge && Objects.equals(id, pet.id) && Objects.equals(petType, pet.petType) && Objects.equals(petBreed, pet.petBreed) && Objects.equals(petGender, pet.petGender) && petHealth == pet.petHealth && Objects.equals(petName, pet.petName) && Objects.equals(petDescription, pet.petDescription) && Objects.equals(petAvatar, pet.petAvatar) && Objects.equals(petPotentialOwner, pet.petPotentialOwner) && Objects.equals(petOwner, pet.petOwner);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, petType, petBreed, petGender, petHealth, petName, petAge, petDescription, petAvatar, petOwner);
+        return Objects.hash(id, petType, petBreed, petGender, petHealth, petName, petAge, petDescription, petAvatar, petPotentialOwner, petOwner);
     }
 
     @Override
@@ -175,6 +186,7 @@ public class Pet {
                 ", petAge=" + petAge +
                 ", petDescription='" + petDescription + '\'' +
                 ", petAvatar=" + petAvatar +
+                ", petPotentialOwner=" + petPotentialOwner +
                 ", petOwner=" + petOwner +
                 '}';
     }

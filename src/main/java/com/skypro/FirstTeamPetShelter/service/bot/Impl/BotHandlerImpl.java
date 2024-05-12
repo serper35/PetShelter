@@ -3,8 +3,7 @@ package com.skypro.FirstTeamPetShelter.service.bot.Impl;
 import com.pengrad.telegrambot.TelegramBot;
 import com.pengrad.telegrambot.model.CallbackQuery;
 import com.pengrad.telegrambot.model.Update;
-import com.skypro.FirstTeamPetShelter.model.Report;
-import com.skypro.FirstTeamPetShelter.model.Shelter;
+import com.skypro.FirstTeamPetShelter.model.*;
 import com.skypro.FirstTeamPetShelter.service.*;
 import com.skypro.FirstTeamPetShelter.service.bot.BotHandler;
 import com.skypro.FirstTeamPetShelter.service.bot.BotService;
@@ -22,6 +21,8 @@ import java.time.LocalDateTime;
 public class BotHandlerImpl implements BotHandler {
     Shelter shelter =  null;
     long petId = 0;
+    Report report = null;
+
     @Autowired
     private BotService botService;
 
@@ -79,6 +80,24 @@ public class BotHandlerImpl implements BotHandler {
             if (update.message().text().contains("+7-9")) {
                 botService.setUserPhone(update.message().text(), telegramBot, update);
             }
+            if (update.message().photo() != null && report != null) {
+                report.setPetPhoto(update.message().photo()[0].fileId().getBytes());
+                sendUpdateMessage("ReportPetDiet", telegramBot, update, null);
+            }
+            if (update.message().text().toLowerCase().contains("диета") && report != null) {
+                report.setPetDiet(update.message().text().toLowerCase().replace("диета", ""));
+                sendUpdateMessage("ReportPetHealthAndAdaptation", telegramBot, update, null);
+            }
+            if (update.message().text().toLowerCase().contains("здоровье") && report != null) {
+                report.setPetHealthAndAdaptation(update.message().text().toLowerCase().replace("здоровье", ""));
+                sendUpdateMessage("ReportPetChangeBehavior", telegramBot, update, null);
+            }
+            if (update.message().text().toLowerCase().contains("поведение") && report != null) {
+                report.setChangeBehavior(update.message().text().toLowerCase().replace("поведение", ""));
+                reportService.addReport(report);
+                report = null;
+                sendUpdateMessage("ReportCompleteAndSave", telegramBot, update, null);
+            }
         }
     }
 
@@ -95,6 +114,29 @@ public class BotHandlerImpl implements BotHandler {
             shelter = shelterService.getShelter(shelterId);
             byte[] shelterImage = shelterImageService.getShelterImageByShelterId(shelterId).getShelterAvatar();
             sendCallbackImageMessage("ShelterHello", telegramBot, callbackQuery, Menu.SHELTER_BASE, shelter, shelterImage);
+        }
+        if (callbackQuery.data().equals("ReportFromAdopter")) {
+            botService.reportFromAdopterStart(telegramBot, callbackQuery.from().id());
+        }
+        if (callbackQuery.data().contains("UserBecomeAdoptive_")) {
+            long userBecomeAdoptiveId = Long.parseLong(callbackQuery.data().replace("UserBecomeAdoptive_", ""));
+            botService.adoptive(telegramBot, callbackQuery.from().id(), userBecomeAdoptiveId);
+        }
+        if (callbackQuery.data().contains("AdoptiveYes_")) {
+            long userId = Long.parseLong(callbackQuery.data().replace("AdoptiveYes_", ""));
+            UserApp userApp = userService.getUser(userId);
+            long tlgId = userApp.getUserTelegramId();
+            Adopter adopter = new Adopter();
+            adopter.setAdopterPhoneNumber(userApp.getUserPhoneNumber());
+            adopter.setAdopterTelegramId(tlgId);
+            adopter.setAdopterName(userApp.getUserName());
+            adopterService.addAdopter(adopter);
+            Pet pet = petService.getPetByPotentialOwner(userId);
+            pet.setPetOwner(adopterService.getAdopterByTelegramId(tlgId));
+            //todo userService.deleteUser(userId);
+            pet.setPetPotentialOwner(null);
+            botService.executeMessage(telegramBot, tlgId, "Вас утвердили в усыновители! Ждём ежедневного отчёта.", null);
+            botService.executeMessage(telegramBot, callbackQuery.from().id(), "Усыновитель сохранён в БД!", null);
         }
         if (shelter != null) {
             String shelterType = firstLetterToUpperCase(shelter.getShelterType());

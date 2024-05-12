@@ -4,6 +4,7 @@ import com.pengrad.telegrambot.TelegramBot;
 import com.pengrad.telegrambot.model.CallbackQuery;
 import com.pengrad.telegrambot.model.Update;
 import com.skypro.FirstTeamPetShelter.model.Pet;
+import com.skypro.FirstTeamPetShelter.model.Report;
 import com.skypro.FirstTeamPetShelter.model.Shelter;
 import com.skypro.FirstTeamPetShelter.enums.Menu;
 import com.skypro.FirstTeamPetShelter.enums.Role;
@@ -88,4 +89,21 @@ public interface BotService {
      * @param update            - Update
      */
     void setUserPhone(String phone, TelegramBot telegramBot, Update update);
+
+    /**
+     * Получение отчёта от усыновителя
+     *
+     * @param telegramBot - TelegramBot
+     * @param chatId      - CallbackQuery
+     * @return - Report
+     */
+    Report reportFromAdopterStart(TelegramBot telegramBot, long chatId);
+
+    /**
+     * Одобрено ли усыновление
+     * @param telegramBot           - TelegramBot
+     * @param id                    - ID
+     * @param userBecomeAdoptiveId  - Telegram ID потенциального усыновителя
+     */
+    void adoptive(TelegramBot telegramBot, Long id, long userBecomeAdoptiveId);
 }

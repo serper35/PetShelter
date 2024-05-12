@@ -18,6 +18,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -105,6 +106,7 @@ public class BotServiceImpl implements BotService {
             userApp.setBecomeAdoptive(true);
             userApp.setContacted(false);
             userService.addUser(userApp);
+            pet.setPetPotentialOwner(userApp);
             result = "Оставьте свой номер телефона в формате +7-9**-***-**-** и с вами вскоре свяжутся наши волонтёры для определения деталей усыновления питомца.";
         } else if (role == Role.USER) {
             if (!userService.getUserByTelegramId(userId).isBecomeAdoptive()) {
@@ -116,11 +118,12 @@ public class BotServiceImpl implements BotService {
                     result = "Оставьте свой номер телефона в формате +7-9**-***-**-** и с вами вскоре свяжутся наши волонтёры для определения деталей усыновления питомца.";
                 }
                 userService.getUserByTelegramId(userId).setBecomeAdoptive(true);
+                pet.setPetPotentialOwner(userService.getUserByTelegramId(userId));
             } else {
                 result = "Вы уже выбрали питомца для усыновления. Для отказа от усыновления или для решения других вопросов обратитесь к волонтёрам.";
             }
         } else if (role == Role.ADOPTER) {
-            result = "У вас уже есть питомец " + petService.getPetByOwner(userId).getPetName() + ". Если есть проблемы, то свяжитесь с волонтёрами";
+            result = "У вас уже есть питомец " + petService.getPetByOwner(adopterService.getAdopterByTelegramId(userId).getId()).getPetName() + ". Если есть проблемы, то свяжитесь с волонтёрами";
         }
         executeMessage(telegramBot, userId, result, null);
     }
@@ -128,8 +131,9 @@ public class BotServiceImpl implements BotService {
     @Override
     public void getPets(TelegramBot telegramBot, CallbackQuery callbackQuery, Shelter shelter) {
         // todo: Реализовать пагинацию
-        List<Pet> pets = petService.getPetsByPetType(shelter.getShelterType()).stream().toList();
-        for (Pet pet: pets) {
+        List<Pet> pets = petService.getPetsByPetType(shelter.getShelterType()).stream().filter(pet -> pet.getPetPotentialOwner() == null).filter(pet -> pet.getPetOwner() == null).toList();
+        for (Pet pet : pets) {
+            // Если есть потенциальный владелец или усыновитель, то в список питомцев такой питомец не попадает
             SendPhoto sendPhoto = new SendPhoto(callbackQuery.from().id(), petAvatarService.getPetAvatarByPet(pet.getId()).getSmallAvatar());
             sendPhoto.caption(pet.getPetName() + " " + pet.getPetAge() + " " + pet.getPetGender());
             sendPhoto.replyMarkup(new InlineKeyboardMarkup(new InlineKeyboardButton("Выбрать").callbackData("PetSelect_" + pet.getId())));
@@ -158,12 +162,46 @@ public class BotServiceImpl implements BotService {
                 case ADOPTER -> {
                     adopterService.getAdopterByTelegramId(update.message().from().id()).setAdopterPhoneNumber(phone);
                 }
-                case VOLUNTEER -> {}
+                case VOLUNTEER -> {
+                }
             }
             executeMessage(telegramBot, update.message().from().id(), "Ваш номер сохранён. Скоро с вами свяжутся.", null);
         } else {
             executeMessage(telegramBot, update.message().from().id(), "Вы ошиблись вводя номер. Попробуйте ещё раз.", null);
         }
+    }
+
+    @Override
+    public Report reportFromAdopterStart(TelegramBot telegramBot, long chatId) {
+        Adopter adopter = adopterService.getAdopterByTelegramId(chatId);
+        Report report = new Report();
+        report.setAdopter(adopter);
+        report.setReviewed(false);
+        report.setReportDate(LocalDateTime.now());
+
+        executeMessage(telegramBot, chatId, infoService.getMessage("ReportFromAdopterStart"), null);
+
+        return report;
+    }
+
+    @Override
+    public void adoptive(TelegramBot telegramBot, Long id, long userBecomeAdoptiveId) {
+        UserApp userApp = userService.getUserByTelegramId(userBecomeAdoptiveId);
+        SendMessage sendMessage;
+        InlineKeyboardMarkup inlineKeyboardMarkup = new InlineKeyboardMarkup();
+        inlineKeyboardMarkup.addRow(new InlineKeyboardButton("Да").callbackData("AdoptiveYes_" + userApp.getId()),
+                new InlineKeyboardButton("Нет").callbackData("AdoptiveNo"));
+        try {
+            sendMessage = new SendMessage(id, userApp.getUserName()
+                    + " (тел.: "
+                    + userApp.getUserPhoneNumber()
+                    + ") одобрен в качестве усыновителя?");
+            sendMessage.replyMarkup(inlineKeyboardMarkup);
+        } catch (RuntimeException e) {
+            logger.error(e.getMessage());
+            sendMessage = new SendMessage(id, infoService.getMessage("Error"));
+        }
+        telegramBot.execute(sendMessage);
     }
 
     @Override
@@ -202,7 +240,7 @@ public class BotServiceImpl implements BotService {
     private void sendMessageToRandomVolunteer(TelegramBot telegramBot, Update update) {
         List<Volunteer> volunteers = volunteerService.getAllVolunteer().stream().toList();
         long volunteerId = volunteers.stream()
-                .skip((int)(volunteers.size() * Math.random()))
+                .skip((int) (volunteers.size() * Math.random()))
                 .findFirst()
                 .get()
                 .getVolunteerTelegramId();
@@ -223,7 +261,7 @@ public class BotServiceImpl implements BotService {
         if (result.contains("{sheltertype}")) {
             if (shelter.getShelterType().equalsIgnoreCase("dog")) {
                 result = result.replace("{sheltertype}", "собачий приют");
-            } else if(shelter.getShelterType().equalsIgnoreCase("cat")) {
+            } else if (shelter.getShelterType().equalsIgnoreCase("cat")) {
                 result = result.replace("{sheltertype}", "кошачий приют");
             }
         }
