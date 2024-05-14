@@ -8,15 +8,16 @@ import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 
 import java.util.Collection;
+import java.util.List;
 
 @Service
 public class PetServiceImpl implements PetService {
+    private final PetServiceRepository petServiceRepository;
+    private static final Logger logger = LoggerFactory.getLogger(PetServiceImpl.class);
 
     public PetServiceImpl(PetServiceRepository petServiceRepository) {
         this.petServiceRepository = petServiceRepository;
     }
-    private final PetServiceRepository petServiceRepository;
-    private static final Logger logger = LoggerFactory.getLogger(PetServiceImpl.class);
 
     @Override
     public Pet addPet(Pet pet) {
@@ -34,6 +35,21 @@ public class PetServiceImpl implements PetService {
     public Collection<Pet> getAllPets() {
         logger.info("Log info: Method getAllPets is invoke.");
         return petServiceRepository.findAll();
+    }
+
+    @Override
+    public Collection<Pet> getPetsByPetType(String petType) {
+        return petServiceRepository.findAllByPetType(petType);
+    }
+
+    @Override
+    public Pet getPetByPotentialOwner(long potential_owner_id) {
+        return petServiceRepository.findByPetPotentialOwnerId(potential_owner_id);
+    }
+
+    @Override
+    public Pet getPetByOwner(long owner_id) {
+        return petServiceRepository.findByPetOwnerId(owner_id);
     }
 
     @Override

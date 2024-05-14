@@ -2,8 +2,11 @@ package com.skypro.FirstTeamPetShelter.service.Impl;
 
 import com.skypro.FirstTeamPetShelter.exception.AdopterNotFoundException;
 import com.skypro.FirstTeamPetShelter.model.Adopter;
+import com.skypro.FirstTeamPetShelter.model.Report;
 import com.skypro.FirstTeamPetShelter.repository.AdopterRepository;
 import com.skypro.FirstTeamPetShelter.service.AdopterService;
+import com.skypro.FirstTeamPetShelter.service.PetService;
+import com.skypro.FirstTeamPetShelter.service.ReportService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
@@ -15,8 +18,13 @@ public class AdopterServiceImpl implements AdopterService {
     final AdopterRepository adopterRepository;
     final Logger logger = LoggerFactory.getLogger(AdopterServiceImpl.class);
 
-    public AdopterServiceImpl(AdopterRepository adopterRepository) {
+    final ReportService reportService;
+    final PetService petService;
+
+    public AdopterServiceImpl(AdopterRepository adopterRepository, ReportService reportService, PetService petService) {
         this.adopterRepository = adopterRepository;
+        this.reportService = reportService;
+        this.petService = petService;
     }
 
     @Override
@@ -53,6 +61,16 @@ public class AdopterServiceImpl implements AdopterService {
     @Override
     public void deleteAdopter(long id) {
         logger.warn("Удаляется усыновитель из БД с ID {}", id);
+        if (this.getAdopter(id).getAdopterReports() != null) {
+            logger.warn("Найдены отчёты! Они также будут удалены.");
+            for(Report report: reportService.getReportsByAdopter(id)) {
+                reportService.deleteReport(report.getId());
+            }
+        }
+        if (petService.getPetByOwner(id) != null) {
+            logger.warn("Усыновителю принадлежал питомец {}. Он также будет удалён из БД.", petService.getPetByOwner(id));
+            petService.deletePet(petService.getPetByOwner(id).getId());
+        }
         adopterRepository.deleteById(id);
     }
 

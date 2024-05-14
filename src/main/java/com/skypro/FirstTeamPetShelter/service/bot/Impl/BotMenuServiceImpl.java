@@ -73,6 +73,7 @@ public class BotMenuServiceImpl implements BotMenuService {
             inlineKeyboardMarkup.addRow(new InlineKeyboardButton("Кинологи").callbackData("DogHandlers"));
         }
         inlineKeyboardMarkup.addRow(new InlineKeyboardButton("Причины отказа").callbackData("PetReasonsForRefusal"), new InlineKeyboardButton("Оставить номер для связи").callbackData("PhoneNumber"));
+        inlineKeyboardMarkup.addRow(new InlineKeyboardButton("Взять питомца").callbackData("GetPet"));
         return inlineKeyboardMarkup;
     }
 
