@@ -14,6 +14,7 @@ import com.skypro.FirstTeamPetShelter.service.bot.BotMenuService;
 import com.skypro.FirstTeamPetShelter.service.bot.BotService;
 import com.skypro.FirstTeamPetShelter.enums.Menu;
 import com.skypro.FirstTeamPetShelter.enums.Role;
+import org.jetbrains.annotations.NotNull;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
@@ -200,6 +201,45 @@ public class BotServiceImpl implements BotService {
         } catch (RuntimeException e) {
             logger.error(e.getMessage());
             sendMessage = new SendMessage(id, infoService.getMessage("Error"));
+        }
+        telegramBot.execute(sendMessage);
+    }
+
+    @Override
+    public void reportImage(String m, TelegramBot telegramBot, Long id, byte[] petPhoto, Report r) {
+        SendPhoto sendPhoto;
+        try {
+            sendPhoto = new SendPhoto(id, petPhoto);
+            sendPhoto.caption(m);
+            InlineKeyboardMarkup inlineKeyboardMarkup = getKeyboard(r);
+            sendPhoto.replyMarkup(inlineKeyboardMarkup);
+            telegramBot.execute(sendPhoto);
+        } catch (RuntimeException e) {
+            logger.error(e.getMessage());
+            m = infoService.getMessage("Error");
+            SendMessage sendMessage = new SendMessage(id, m);
+            telegramBot.execute(sendMessage);
+        }
+    }
+
+    private @NotNull InlineKeyboardMarkup getKeyboard(Report r) {
+        InlineKeyboardMarkup inlineKeyboardMarkup = new InlineKeyboardMarkup();
+        inlineKeyboardMarkup.addRow(new InlineKeyboardButton("Отлично").callbackData("RYes_" + r.getId()));
+        inlineKeyboardMarkup.addRow(new InlineKeyboardButton("Доработать").callbackData("RNo_" + r.getId()));
+        return inlineKeyboardMarkup;
+    }
+
+    @Override
+    public void reportMessage(TelegramBot telegramBot, Long id, String m, Report r) {
+        SendMessage sendMessage;
+        try {
+            sendMessage = new SendMessage(id, m);
+            InlineKeyboardMarkup inlineKeyboardMarkup = getKeyboard(r);
+            sendMessage.replyMarkup(inlineKeyboardMarkup);
+        } catch (RuntimeException e) {
+            logger.error(e.getMessage());
+            m = infoService.getMessage("Error");
+            sendMessage = new SendMessage(id, m);
         }
         telegramBot.execute(sendMessage);
     }

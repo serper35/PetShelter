@@ -82,11 +82,7 @@ public class UserServiceImpl implements UserService {
         if (user == null) {
             throw new UserNotFoundException("Пользователь не найден");
         }
-
-        if (petService.getPetByPotentialOwner(id).getPetName() != null) {
-            logger.warn("Пользователь был потенциальным владельцем {}. Запись об этом также будет удалена из БД.", petService.getPetByPotentialOwner(id));
-            petService.getPetByPotentialOwner(id).setPetPotentialOwner(null);
-        }
+        //petService.getPetByPotentialOwner(id).setPetPotentialOwner(null);
 
         userRepository.deleteById(id);
         logger.info("UserApp deleted");

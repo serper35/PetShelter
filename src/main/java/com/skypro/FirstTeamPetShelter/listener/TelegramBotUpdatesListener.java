@@ -10,6 +10,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.io.IOException;
 import java.util.List;
 
 @Service
@@ -37,7 +38,11 @@ public class TelegramBotUpdatesListener implements UpdatesListener {
                 botHandler.callbackHandle(telegramBot, callbackQuery);
             }
             if (update.message() != null) {
-                botHandler.updateHandle(telegramBot, update);
+                try {
+                    botHandler.updateHandle(telegramBot, update);
+                } catch (IOException e) {
+                    throw new RuntimeException(e);
+                }
             }
         });
         return UpdatesListener.CONFIRMED_UPDATES_ALL;

@@ -106,4 +106,8 @@ public interface BotService {
      * @param userBecomeAdoptiveId  - Telegram ID потенциального усыновителя
      */
     void adoptive(TelegramBot telegramBot, Long id, long userBecomeAdoptiveId);
+
+    void reportImage(String m, TelegramBot telegramBot, Long id, byte[] petPhoto, Report r);
+
+    void reportMessage(TelegramBot telegramBot, Long id, String m, Report r);
 }

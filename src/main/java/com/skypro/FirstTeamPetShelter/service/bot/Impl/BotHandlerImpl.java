@@ -1,8 +1,10 @@
 package com.skypro.FirstTeamPetShelter.service.bot.Impl;
 
 import com.pengrad.telegrambot.TelegramBot;
-import com.pengrad.telegrambot.model.CallbackQuery;
-import com.pengrad.telegrambot.model.Update;
+import com.pengrad.telegrambot.model.*;
+import com.pengrad.telegrambot.request.GetFile;
+import com.pengrad.telegrambot.request.SendMessage;
+import com.pengrad.telegrambot.request.SendPhoto;
 import com.skypro.FirstTeamPetShelter.model.*;
 import com.skypro.FirstTeamPetShelter.service.*;
 import com.skypro.FirstTeamPetShelter.service.bot.BotHandler;
@@ -13,13 +15,16 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.IOException;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 
 @Service
 @Transactional
 public class BotHandlerImpl implements BotHandler {
-    Shelter shelter =  null;
+    Shelter shelter = null;
     long petId = 0;
     Report report = null;
 
@@ -51,7 +56,7 @@ public class BotHandlerImpl implements BotHandler {
     private BotHelper botHelper;
 
     @Override
-    public void updateHandle(TelegramBot telegramBot, Update update) {
+    public void updateHandle(TelegramBot telegramBot, Update update) throws IOException {
         if (update.message().text() != null) {
             if (update.message().text().equals("/start")) {
                 // проверка пользователя - кто это - новый, юзер, усыновитель или волонтер
@@ -80,10 +85,6 @@ public class BotHandlerImpl implements BotHandler {
             if (update.message().text().contains("+7-9")) {
                 botService.setUserPhone(update.message().text(), telegramBot, update);
             }
-            if (update.message().photo() != null && report != null) {
-                report.setPetPhoto(update.message().photo()[0].fileId().getBytes());
-                sendUpdateMessage("ReportPetDiet", telegramBot, update, null);
-            }
             if (update.message().text().toLowerCase().contains("диета") && report != null) {
                 report.setPetDiet(update.message().text().toLowerCase().replace("диета", ""));
                 sendUpdateMessage("ReportPetHealthAndAdaptation", telegramBot, update, null);
@@ -98,6 +99,11 @@ public class BotHandlerImpl implements BotHandler {
                 report = null;
                 sendUpdateMessage("ReportCompleteAndSave", telegramBot, update, null);
             }
+        }
+        if (update.message().document() != null && report != null) {
+            File file = telegramBot.execute(new GetFile(update.message().document().fileId())).file();
+            report.setPetPhoto(telegramBot.getFileContent(file));
+            sendUpdateMessage("ReportPetDiet", telegramBot, update, null);
         }
     }
 
@@ -116,7 +122,26 @@ public class BotHandlerImpl implements BotHandler {
             sendCallbackImageMessage("ShelterHello", telegramBot, callbackQuery, Menu.SHELTER_BASE, shelter, shelterImage);
         }
         if (callbackQuery.data().equals("ReportFromAdopter")) {
-            botService.reportFromAdopterStart(telegramBot, callbackQuery.from().id());
+            report = botService.reportFromAdopterStart(telegramBot, callbackQuery.from().id());
+        }
+        if (callbackQuery.data().contains("Report_")) {
+            long reportId = Long.parseLong(callbackQuery.data().replace("Report_", ""));
+            Report r = reportService.getReportById(reportId);
+            String m = "Дата отчета: " + r.getReportDate()
+                    + "Диета: " + r.getPetDiet()
+                    + "Здоровье и адоптация: " + r.getPetHealthAndAdaptation()
+                    + "Изменения в поведении: " + r.getChangeBehavior();
+            if (r.getPetPhoto() != null) {
+                botService.reportImage(m, telegramBot, callbackQuery.from().id(), r.getPetPhoto(), r);
+            } else {
+                botService.reportMessage(telegramBot, callbackQuery.from().id(), m, r);
+            }
+        }
+        if (callbackQuery.data().contains("RYes_")) {
+            long reportId = Long.parseLong(callbackQuery.data().replace("RYes_", ""));
+            reportService.getReportById(reportId).setReviewed(true);
+            botService.executeMessage(telegramBot, callbackQuery.from().id(), "Отчет " + reportService.getReportById(reportId).getAdopter().getAdopterName() + " проверен!", null);
+            botService.executeMessage(telegramBot, reportService.getReportById(reportId).getAdopter().getAdopterTelegramId(), "Ваш отчёт за " + reportService.getReportById(reportId).getReportDate() + " проверен!", null);
         }
         if (callbackQuery.data().contains("UserBecomeAdoptive_")) {
             long userBecomeAdoptiveId = Long.parseLong(callbackQuery.data().replace("UserBecomeAdoptive_", ""));
@@ -133,7 +158,9 @@ public class BotHandlerImpl implements BotHandler {
             adopterService.addAdopter(adopter);
             Pet pet = petService.getPetByPotentialOwner(userId);
             pet.setPetOwner(adopterService.getAdopterByTelegramId(tlgId));
-            //todo userService.deleteUser(userId);
+            userApp.setBecomeAdoptive(false);
+            pet.setPetPotentialOwner(null);
+            userService.deleteUser(userId);
             pet.setPetPotentialOwner(null);
             botService.executeMessage(telegramBot, tlgId, "Вас утвердили в усыновители! Ждём ежедневного отчёта.", null);
             botService.executeMessage(telegramBot, callbackQuery.from().id(), "Усыновитель сохранён в БД!", null);
@@ -236,7 +263,7 @@ public class BotHandlerImpl implements BotHandler {
     private void adopterUpdateHandle(TelegramBot telegramBot, Update update) {
         // если усыновитель, то проверка когда был отчет, сколько времени. если нужен отчет, то просим, если рано то рано говорим, и выдаем в обоих случаях меню усыновителя
         // если усыновитель и пришла дата окончания проверки и нет продления, а также нарушений, то поздравление иначе отказ и возврат животного
-        sendUpdateMessage("HelloAdopter", telegramBot, update, null);
+        sendUpdateMessage("HelloAdopter", telegramBot, update, Menu.ADOPTER_SEND_REPORT);
         String messageText;
         long adopterId = adopterService.getAdopterByTelegramId(update.message().from().id()).getId();
         // Если список отчетов усыновителя не пуст

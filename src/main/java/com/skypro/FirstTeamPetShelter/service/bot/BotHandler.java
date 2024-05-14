@@ -4,6 +4,9 @@ import com.pengrad.telegrambot.TelegramBot;
 import com.pengrad.telegrambot.model.CallbackQuery;
 import com.pengrad.telegrambot.model.Update;
 
+import java.io.FileNotFoundException;
+import java.io.IOException;
+
 /**
  * Обработчик команд от бота
  */
@@ -13,7 +16,7 @@ public interface BotHandler {
      * @param telegramBot   - com.pengrad.telegrambot.TelegramBot
      * @param update        - com.pengrad.telegrambot.model.Update
      */
-    void updateHandle(TelegramBot telegramBot, Update update);
+    void updateHandle(TelegramBot telegramBot, Update update) throws IOException;
 
     /**
      * Обработка CallbackQuery
