@@ -3,6 +3,7 @@ package com.skypro.FirstTeamPetShelter.service.Impl;
 import com.skypro.FirstTeamPetShelter.exception.UserNotFoundException;
 import com.skypro.FirstTeamPetShelter.model.UserApp;
 import com.skypro.FirstTeamPetShelter.repository.UserRepository;
+import com.skypro.FirstTeamPetShelter.service.PetService;
 import com.skypro.FirstTeamPetShelter.service.UserService;
 import org.apache.catalina.User;
 import org.slf4j.Logger;
@@ -15,8 +16,11 @@ import java.util.Collection;
 public class UserServiceImpl implements UserService {
     private final UserRepository userRepository;
 
-    public UserServiceImpl(UserRepository userRepository) {
+    final PetService petService;
+
+    public UserServiceImpl(UserRepository userRepository, PetService petService) {
         this.userRepository = userRepository;
+        this.petService = petService;
     }
 
     private final Logger logger = LoggerFactory.getLogger(UserServiceImpl.class);
@@ -78,6 +82,7 @@ public class UserServiceImpl implements UserService {
         if (user == null) {
             throw new UserNotFoundException("Пользователь не найден");
         }
+        //petService.getPetByPotentialOwner(id).setPetPotentialOwner(null);
 
         userRepository.deleteById(id);
         logger.info("UserApp deleted");

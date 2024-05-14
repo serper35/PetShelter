@@ -68,7 +68,7 @@ public class PetAvatarServiceImpl implements PetAvatarService {
 
     @Override
     public PetAvatar getPetAvatarByPet(long pet_id) {
-        return null;
+        return petAvatarRepository.findPetAvatarByPetId(pet_id);
     }
 
     @Override

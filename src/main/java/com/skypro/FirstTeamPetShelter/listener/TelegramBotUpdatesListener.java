@@ -3,16 +3,14 @@ package com.skypro.FirstTeamPetShelter.listener;
 import com.pengrad.telegrambot.TelegramBot;
 import com.pengrad.telegrambot.UpdatesListener;
 import com.pengrad.telegrambot.model.*;
-import com.skypro.FirstTeamPetShelter.service.*;
 import com.skypro.FirstTeamPetShelter.service.bot.BotHandler;
-import com.skypro.FirstTeamPetShelter.service.bot.BotMenuService;
-import com.skypro.FirstTeamPetShelter.service.bot.BotService;
 import jakarta.annotation.PostConstruct;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.io.IOException;
 import java.util.List;
 
 @Service
@@ -40,7 +38,11 @@ public class TelegramBotUpdatesListener implements UpdatesListener {
                 botHandler.callbackHandle(telegramBot, callbackQuery);
             }
             if (update.message() != null) {
-                botHandler.updateHandle(telegramBot, update);
+                try {
+                    botHandler.updateHandle(telegramBot, update);
+                } catch (IOException e) {
+                    throw new RuntimeException(e);
+                }
             }
         });
         return UpdatesListener.CONFIRMED_UPDATES_ALL;

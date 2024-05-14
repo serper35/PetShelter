@@ -11,7 +11,11 @@ import java.util.List;
 @RestController
 @RequestMapping("pet")
 public class PetServiceController {
-    private PetService petService;
+    private final PetService petService;
+
+    public PetServiceController(PetService petService) {
+        this.petService = petService;
+    }
 
     @PostMapping
     public ResponseEntity<Pet> addPet(@RequestBody Pet pet) {
